@@ -1,4 +1,4 @@
-# AWS ML & IoT Lab
+# DataPalooza: A Music Festival themed ML + IoT Workshop
 
 The goal of these labs is to test two different configurations for integrating ML and IoT devices. The application is to track crowd emotions in real-time.
 
