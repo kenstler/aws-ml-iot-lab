@@ -2,7 +2,7 @@
 
 ## Summary
 
-The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. Recall that we'll be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, we're going to pre-process images with the face-detection model to:
+The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. We'll be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, we're going to pre-process images with the face-detection model to:
 * Only send images to Rekognition when a face is detected
 * Only send the actual face crop itself
 
