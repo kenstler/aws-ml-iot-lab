@@ -1,4 +1,10 @@
-# To-do
+# Challenge 2: Cloud Inference
+
+## Summary
+
+Now that you have a face-detection model on a SageMaker endpoint, we can leverage that endpoint to build out an ML/IoT pipeline for our app that does all the inference in the cloud. By running inference in the cloud, we're able to use accurate models at a rapid pace by leveraging powerful computational instances like C5.
+
+Once we've configured an IoT device to send images to the endpoint, we'll go ahead and build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time.
 
 ## Instructions
 
