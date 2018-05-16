@@ -1,4 +1,5 @@
-# Challenge 1: Launching a SageMaker Inference Endpoint for Face-Detection
+# Challenge 1:
+# Launching a SageMaker Inference Endpoint for Face-Detection
 
 ## Summary
 
