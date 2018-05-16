@@ -20,7 +20,7 @@ In this challenge, you will use SageMaker in your efforts to deploy a face-detec
 
 Now that you have a face-detection model on a SageMaker endpoint, we can leverage that endpoint to build out an ML/IoT pipeline for our app that does all the inference in the cloud. By running inference in the cloud, we're able to use accurate models at a rapid pace by leveraging powerful computational instances like C5.
 
-In this challenge, you will configured an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You'll build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time, including AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
+In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You'll build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time, including AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
 
 ## [Challenge 3](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_3)
 
@@ -28,10 +28,10 @@ Now that we've successfully built out a pipeline for our application based aroun
 * Only trigger when a face is detected
 * Only actually send the face crop
 
-In the previous Challenge, we cited performance and speed as two advantages of cloud inference. Unfortunately, by keeping inference in the crowd our IoT devices must regularly send images at constant intervals (i.e. they're **always on**) and they send entire images. This seems like a waste of bandwidth; by putting face-detection inference at the edge, we can directly make Rekognition calls from the device itself. The tradeoff here is that while we're only sending face crops when there detected over the network, inference at the edge can be less performant.
+In the previous Challenge, we cited performance and speed as two advantages of cloud inference. Unfortunately, by keeping inference in the cloud our IoT devices must regularly send images at constant intervals (i.e. they're **always on**) and they send entire images. This seems like a waste of bandwidth; by putting face-detection inference at the edge, we can directly make Rekognition calls from the device itself. The tradeoff here is that while we're only sending face crops when they're detected over the network, inference at the edge can be less performant.
 
 In this challenge, you will swap out the ML/IoT part of the previous pipeline with a new pipeline that uses AWS DeepLens to run inference on the edge. DeepLens will then put face crops to the S3 bucket correctly, continuing the rest of the application pipeline.
 
 # To -do
-* Provide step-by-step instructions (re:screenshots) for every stage of this lab.
-* Incude instructons for ensuring users have assigned the right permission policies to the roles used at each step of the way.
+* Mahendra, insert your isntructions in the field provided for Challenge 2
+* DeepLens registration instructions link for Challenge 3
