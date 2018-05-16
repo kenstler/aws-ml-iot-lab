@@ -58,7 +58,7 @@ class FIFO_Thread(Thread):
 
 def push_to_s3(img, index):
     try:
-        bucket_name = "<BUCKET_NAME>"
+        bucket_name = "your-bucket"
 
         timestamp = int(time.time())
         now = datetime.datetime.now()
