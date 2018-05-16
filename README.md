@@ -8,7 +8,13 @@ To build this application, you will use AWS services such as Amazon SageMaker, A
 
 ## [Challenge 1](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1)
 
-In this challenge, you will deploy a pre-trained face-detection model to a SageMaker endpoint. Your endpoint will process raw images, detect faces if present, push face crops to an S3 bucket, and return raw detection coordinates to requester.
+The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. We'll be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, we're going to pre-process images with the face-detection model to:
+
+Only send images to Rekognition when a face is detected
+Only send the actual face crop itself
+This limits both the number of API calls we make, as well as the size of content we send.
+
+In this challenge, you will use SageMaker in your efforts to deploy a face-detection model. You will first launch a SageMaker notebook instance; from your notebook, you will be able to explore the data your model will train on, see how the model is trained, and deploy a pre-trained model to an inference endpoint. You will also create an S3 bucket for the endpoint to store detected faces, which you will need as part of your app's pipeline.
 
 ## [Challenge 2](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1)
 
