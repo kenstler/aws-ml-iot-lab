@@ -60,7 +60,7 @@ A window should pop-up:
 * Under bucket name: Enter your bucket name
 * Under region: select "US East (N. Virginia)"
 
-Click "Create" at the bottom right.
+Click "Create" at the bottom left.
 
 ![Alt text](../screenshots/create_bucket_1.png)
 
