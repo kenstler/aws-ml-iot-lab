@@ -8,7 +8,7 @@ The first stop in the pipeline of your Crowd Emotion Tracking App is a face-dete
 
 This limits both the number of API calls we make, as well as the size of content we send.
 
-In this challenge, you will use SageMaker in your efforts to deploy a face-detection model. You will first launch a SageMaker notebook instance; from your notebook, your will be able to explore the data your model will train on, see how the model is trained, and deploy a pre-trained model to an inference endpoint. You will also create an S3 bucket for the endpoint to store detected faces, which you will need to develop you Crowd Emotion Tracking App.
+In this challenge, you will use SageMaker in your efforts to deploy a face-detection model. You will first launch a SageMaker notebook instance; from your notebook, you will be able to explore the data your model will train on, see how the model is trained, and deploy a pre-trained model to an inference endpoint. You will also create an S3 bucket for the endpoint to store detected faces, which you will need as part of your app's pipeline.
 
 ## Instructions
 
@@ -21,7 +21,7 @@ Next, at the home console screen, type in "SageMaker" into the search bar and cl
 ![Alt text](../screenshots/console_0.png)
 
 Next, you should find yourself at the Amazon SageMaker home page (if not, click "Amazon SageMaker" on the top left sidebar).
-Please click the drop-down menu between your account name and "Support" and select "US East (N. Virginia)". Many resources we will be using in this workshop are in region us-east-1, so we need to make sure we launch SageMaker services in the same region.
+Please click the drop-down menu between your account name and "Support" and select "US East (N. Virginia)". Many resources we will be using in this workshop are in region **us-east-1**, so we need to make sure we launch SageMaker services in the same region.
 
 ![Alt text](../screenshots/sagemaker_home_0.png)
 
@@ -99,15 +99,15 @@ Next, click on "SSD_Face_Detection_SageMaker_Endpoint.ipynb" to open up the note
 
 ![Alt text](../screenshots/jupyter_notebook_0.png)
 
-A Jupyter notebook is essential an interactive document that processes code blocks and produces output. You can navigate through the code blocks using the arrow keys; the code block you're currently on will be highlighted in a box with a blue edge. You'll notice that there are two kinds of blocks, Markdown blocks and code blocks. 
+A Jupyter notebook is an interactive document that processes code blocks and produces output, and is commonly used in data exploration and experimentation. You can navigate through the code blocks using the arrow keys; the code block you're currently on will be highlighted in a box with a blue edge. You'll notice that there are two kinds of blocks, markdown blocks and code blocks. 
 
-The markdown blocks are just there to provide accompanying documentation to the notebook, but we actually want to run the code blocks. To do this, simply click **Control+Return** while over a code block. This sends the code block to an ipython kernel that runs the code sequentially like a script, and returns any output. 
+The markdown blocks are just there to provide accompanying documentation to the notebook, but we actually want to run the code blocks. To do this, simply click **Control+Return** while over a code block. This sends the code block to an ipython kernel that runs the code sequentially like a script, and returns output, if any. 
 
 The ipython kernel keeps track of the state of the code ran so far, so it's important to run code blocks sequentially from the top-down so it can process in the correct order. When you run a code block, the "In" next to the block indicates the state of the kernel; it will either show a "\*" to indicate that the code block is still processing, or it will show an integer that shows the order in which the blocks were run since the notebook was launched. (These are already there by default).
 
 Please proceed to run each code block, until you're told to return to these instructions
 
-Once you've reached **STOP**, you'll have seen the inference code and will likely have guessed that we need to insert the S3 bucket name you created into the "<your-nucket-name>" placeholder. To do this, go to the jupyter dashboard, and open "mxnet_ssd_face_detection_rekognition.py".
+Once you've reached **STOP**, you'll have seen the inference code and will likely have guessed that we need to insert the S3 bucket name you created into the "your-bucket-name" placeholder. To do this, go to the jupyter dashboard, and open "mxnet_ssd_face_detection_rekognition.py".
 
 The dashboard will then open a text editor. Once there, replace the "your-bucket" (highlighted) with the bucket name you created earlier:
 
@@ -120,6 +120,3 @@ By the end of the notebook, you should have successfully launched a SageMaker en
 You can check this by going to your S3 bucket, where you'll find two objects uploaded to the bucket; the two face crops from the test image.
 
 You've now completed Challenge 1.
-
-
-
