@@ -2,7 +2,7 @@
 
 The goal of these labs is to test two different configurations for integrating ML and IoT devices. The application is to track crowd emotions in real-time.
 
-## Challenge 1
+## [Challenge 1](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1)
 
 Deploy pre-trained model to an inference endpoint using SageMaker and user-configured inference code. Your endpoint will process raw images, detect faces if present, push face crops to an S3 bucket, and return raw detection coordinates to requester.
 
