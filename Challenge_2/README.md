@@ -1,4 +1,4 @@
-# Challenge 2: Cloud Inference Pipeline
+# Challenge 1: Cloud Inference Pipeline
 
 ## Summary
 
