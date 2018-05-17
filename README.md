@@ -6,7 +6,7 @@ In this workshop, you play the role of data scientists working for a bold new st
 
 To build this application, you will use AWS services such as Amazon SageMaker, Amazon S3, Amazon Rekognition, Amazon CloudWatch, Amazon DynamoDB, AWS Lambda, AWS GreenGrass, and AWS DeepLens. You will explore two common ML/IoT configurations for running inference: hosting inference in the cloud with C5, and hosting inference on the edge with DeepLens.
 
-## [Prep Excercise](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1)
+## [Prep Exercise](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1)
 
 The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. We'll be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, we're going to pre-process images with the face-detection model to:
 * Only send images to Rekognition when a face is detected
