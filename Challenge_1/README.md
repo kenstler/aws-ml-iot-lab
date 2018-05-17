@@ -1,4 +1,4 @@
-# Challenge 1: Launching a SageMaker Endpoint for Face-Detection
+# Prep Exercise: Launching a SageMaker Endpoint for Face-Detection
 
 ## Summary
 
