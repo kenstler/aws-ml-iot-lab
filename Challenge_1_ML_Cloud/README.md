@@ -1,4 +1,4 @@
-# Challenge 1: Cloud Inference Pipeline
+# Challenge 1: ML in the Cloud
 
 ## Summary
 
