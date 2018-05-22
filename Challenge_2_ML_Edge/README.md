@@ -1,4 +1,4 @@
-# Challenge 2: Edge Inference Pipeline
+# Challenge 2: ML at the Edge
 ## Summary
 
 Now that we've successfully built out a pipeline for our application based around cloud-inference, it's time to revisit this configuration. In ML/IoT pipelines, we often have a choice to make about where inference is ran. Recall that in this particular scenario, the face detection inference is acting as a gate to the Rekognition API call:
