@@ -6,7 +6,7 @@ In this workshop, you play the role of data scientists working for a bold new st
 
 To build this application, you will use AWS services such as Amazon SageMaker, Amazon S3, Amazon Rekognition, Amazon CloudWatch, Amazon DynamoDB, AWS Lambda, AWS GreenGrass, and AWS DeepLens. You will explore two common ML/IoT configurations for running inference: hosting inference in the cloud with C5, and hosting inference on the edge with DeepLens.
 
-## [Prep Exercise](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1)
+## [Prep Challenge](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Prep_Challenge)
 
 The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. We'll be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, we're going to pre-process images with the face-detection model to:
 * Only send images to Rekognition when a face is detected
@@ -16,12 +16,12 @@ This limits both the number of API calls we make, as well as the size of content
 
 In this challenge, you will use SageMaker in your efforts to deploy a face-detection model. You will first launch a SageMaker notebook instance; from your notebook, you will be able to explore the data your model will train on, see how the model is trained, and deploy a pre-trained model to an inference endpoint. You will also create an S3 bucket for the endpoint to store detected faces, which you will need as part of your app's pipeline.
 
-## [Challenge 1](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_2)
+## [Challenge 1: ML in the Cloud](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_1_ML_Cloud)
 Now that you have a face-detection model on a SageMaker endpoint, we can leverage that endpoint to build out an ML/IoT pipeline for our app that does all the inference in the cloud. By running inference in the cloud, we're able to use accurate models at a rapid pace by leveraging powerful computational instances like C5.
 
 In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You'll build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time, including AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
 
-## [Challenge 2](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_3)
+## [Challenge 2: ML at the Edge](https://github.com/kenstler/aws-ml-iot-lab/tree/master/Challenge_2_ML_Edge)
 
 Now that we've successfully built out a pipeline for our application based around cloud-inference, it's time to revisit this configuration. In ML/IoT pipelines, we often have a choice to make about where inference is ran. Recall that in this particular scenario, the face detection inference is acting as a gate to the Rekognition API call:
 * Only trigger when a face is detected
