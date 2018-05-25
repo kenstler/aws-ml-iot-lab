@@ -12,7 +12,7 @@ In this challenge, you will configure an IoT device to act as a smart camera, wh
 In this part of the lab we’re we will walk you through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
 
 ### Step 1 - Setting up the hardware	
-There are a few things our Intel NUC is going to need set up at an operating system level to support Greengrass.
+There are a few things the device is going to need set up at an operating system level to support Greengrass.
 We need to add a user and group for Greengrass to use. SSH into your device and run the following commands:
 
 ```
@@ -39,7 +39,7 @@ fs.protected_hardlinks = 1
 fs.protected_symlinks = 1
 ```
 
-If the above configuration file as correct you can proceed, if you had to add those two lines please reboot your Intel NUC and then keep following the steps. To reboot your Intel NUC use:
+If the above configuration file as correct you can proceed, if you had to add those two lines please reboot your Device and then keep following the steps. To reboot your Device use:
 
 ```
 sudo reboot now
