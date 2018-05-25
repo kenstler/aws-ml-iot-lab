@@ -338,9 +338,8 @@ Deploy Lambda (GG Group Settings with the new Lambda and Resources)
 
 In AWS IOT Greengrass console. Click on the Grassgrass group which you have created earlier.
 
-1.	Greengrass  Groups  "GGObjectClassificationGroup"  Add Lambda
-2.	Click on Lambda  Add Lambda  Create new Lambda
-
+1.	Greengrass -> Groups -> "GGObjectClassificationGroup" -> Add Lambda
+2.	Click on Lambda -> Add Lambda -> Create new Lambda
 
 Name		: greengrassSagemakerInference
 RunTime	: Python 2.7
@@ -351,7 +350,6 @@ Exiting role	: service-role/lambda_basic_execution
 
 Upload greengrassSagemakerInference.zip
  
-
 Handler	: "greengrassSagemakerInference.function_handler"
     
 On the "Configure test event" dialog, keep the default settings and set "Event Name" as "TestEvent".
@@ -359,12 +357,11 @@ Click "Create"
 Save Changes
 Publish the code via "Actions / Publish new version".
 Click on "Publish".
-     
 
 This will create version 1 for the new function. Now we can go back to Greengrass console to complete our group settings before the deployment.
 
 3.	Add Lambda to the Group
-Groups  YourGroup  Lambda  Add Lambda  Use exiting Lambda  Your Lambda  Version
+Groups -> YourGroup -> Lambda -> Add Lambda -> Use exiting Lambda -> Your Lambda -> Version
 
 Edit lambda memory limit and timeout like below
 
@@ -386,16 +383,15 @@ o	Add resources – select webcam
 Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud and Topic as “ModelInference” 
 	 
 7.	Update service role
-Change AWS IAM  Roles / 'GreengrassServiceRole' to include "AWSGreengrassResourceAccessPolicy", "AmazonS3ReadOnlyAccess" , AWSGreengrassFullAccess and AWSSagemakerFullAccess
+Change AWS IAM -> Roles / 'GreengrassServiceRole' to include "AWSGreengrassResourceAccessPolicy", "AmazonS3ReadOnlyAccess" , AWSGreengrassFullAccess and AWSSagemakerFullAccess
  
-
 8.	Attach Greengrass service role to the your Greengrass group
 
-Groups  YourGroup  Settings  GroupRole  Add Role
+Groups -> YourGroup -> Settings -> GroupRole -> Add Role
 
 9.	Deploy Greengrass group:
 
-Groups  YourGroup  Actions  Deploy
+Groups -> YourGroup -> Actions -> Deploy
 
 Evaluate the Model @Cloud
 
