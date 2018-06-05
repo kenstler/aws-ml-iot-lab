@@ -32,5 +32,4 @@ In the previous Challenge, we cited performance and speed as two advantages of c
 In this challenge, you will swap out the ML/IoT part of the previous pipeline with a new pipeline that uses AWS DeepLens to run inference on the edge. DeepLens will then put face crops to the S3 bucket correctly, continuing the rest of the application pipeline.
 
 # To -do
-* Mahendra, insert your isntructions in the field provided for Challenge 1
 * DeepLens registration instructions link for Challenge 2
