@@ -96,7 +96,7 @@ Click on roles and Create new role
 
 Select AWS Greengrass Role as the Service Role Type – you will have to scroll down to find it in the list.
 
-Select AWSGreengrassResourceAccessRolePolicy and CloudWatchLogsFullAccess policies and click Next. 
+Select AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AWSSagemakerFullAccess policies and click Next
 
 Enter a name for this role, let’s call it MLandIoTCoreRole
  
@@ -329,14 +329,17 @@ Congrats on getting Greengrass running!
 
 
 ### Lambda setup:
-Per prerequisite step#5. Download Lambda zip file from “LINK to be given during lab”
-You can download it using firefox browser on the Ubuntu desktop
+Download Lambda zip file greengrassSagemakerInference.zip located in same github.
+Unzip the file on your machine.
+Open greengrassSagemakerInference.py, check line #24, endpoint_name = 'xxxxx', replace xxxx with actual SagemakerEndpoint you created during Sagemaker prechallenge lab.
+Save the file.
+Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. We will use this zip file to create lambda.
 
 Deploy Lambda (GG Group Settings with the new Lambda and Resources)
 
 In AWS IOT Greengrass console. Click on the Grassgrass group which you have created earlier.
 
-1.	Greengrass -> Groups -> "GGObjectClassificationGroup" -> Add Lambda
+1.	Greengrass -> Groups -> "MLandIoTCoreRole" -> Add Lambda
 2.	Click on Lambda -> Add Lambda -> Create new Lambda
 
 Name		: greengrassSagemakerInference
@@ -346,48 +349,57 @@ Role		: Choose an existing role
 
 Exiting role	: service-role/lambda_basic_execution
 
+hit creat lambda button.
+In next screen, under function code, choose Code entry type as "Upload a .zip file"
 Upload greengrassSagemakerInference.zip
  
 Handler	: "greengrassSagemakerInference.function_handler"
-    
-On the "Configure test event" dialog, keep the default settings and set "Event Name" as "TestEvent".
-Click "Create"
-Save Changes
-Publish the code via "Actions / Publish new version".
-Click on "Publish".
+
+Save lambda by clicking "Save" button on top.
+
+Lets publish this lambda function;
+
+Select Actions dropdownbox
+
+Click "Publish new version"
+keep Publish box empty, Click on "Publish".
 
 This will create version 1 for the new function. Now we can go back to Greengrass console to complete our group settings before the deployment.
 
 3.	Add Lambda to the Group
-Groups -> YourGroup -> Lambda -> Add Lambda -> Use exiting Lambda -> Your Lambda -> Version
+Groups -> MLandIoT -> Lambdas -> Add Lambda -> Use exiting Lambda -> greengrassSagemakerInference -> Version 1 ->Finish
+
+Under Groups -> Lambdas, select greengrassSagemakerInference. Click Edit button.
 
 Edit lambda memory limit and timeout like below
 
     - Memory limit: 96 mb
     - Timeout: 10 sec
     - Check "Make this function long-lived and keep it running indefinitely" 
+ 
+ Click "Update" to save the changes.
 	    	   
 4.	Add local dev resources for the camera access
+Under Groups -> MLandIoT ->Resources
+Select Add Resource
+
 o	Name this resource - webcam
 o	Local resource type – Device
 o	Device path - /dev/video0
 o	Specify the OS group used to access this resource: Select "Automatically add OS group"
 o	Select "Read and write access"
 
+Save
+
+Under Groups -> Lambdas, select greengrassSagemakerInference
 5.	Attach the resources to Lambda
 o	Add resources – select webcam
 
 6.	Add Subscriptions
 Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud and Topic as “ModelInference” 
 	 
-7.	Update service role
-Change AWS IAM -> Roles / 'GreengrassServiceRole' to include "AWSGreengrassResourceAccessPolicy", "AmazonS3ReadOnlyAccess" , AWSGreengrassFullAccess and AWSSagemakerFullAccess
- 
-8.	Attach Greengrass service role to the your Greengrass group
 
-Groups -> YourGroup -> Settings -> GroupRole -> Add Role
-
-9.	Deploy Greengrass group:
+7.	Deploy Greengrass group:
 
 Groups -> YourGroup -> Actions -> Deploy
 
