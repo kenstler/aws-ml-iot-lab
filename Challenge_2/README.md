@@ -20,16 +20,10 @@ sudo adduser --system ggc_user
 sudo addgroup --system ggc_group
 ```
 
-Next we’ll need SQL Lite 3, at this point your device might already have this dependency which is ok.
-
-```
-sudo apt-get install sqlite3 –y
-```
-
 Next we want to edit one of our boot scripts to make sure hardlink/softlink protection is enabled. Edit the following file:
 
 ```
-sudo nano /etc/sysctl.d/98-nuc.conf
+sudo nano /etc/sysctl.d/99-sysctl.conf
 ```
 
 This file is probably empty and you can just add these two lines.
@@ -45,11 +39,11 @@ If the above configuration file as correct you can proceed, if you had to add th
 sudo reboot now
 ```
 
-The final part of this first step is just because we’re running Ubuntu. We have to replace our symlinked resolv.conf file with a real file, including the same contents it currently has.
+After a few minutes, connect to your instance by using SSH as above. Then, run the following command to confirm the change.
 
 ```
-cd /etc
-sudo mv $(readlink /etc/resolv.conf) /etc/resolv.conf
+sudo sysctl -a | grep fs.protected
+
 ```
 
 Tip: If you get an error running the below command, it’s because it has already been run and your resolv.conf is not a symlink.
