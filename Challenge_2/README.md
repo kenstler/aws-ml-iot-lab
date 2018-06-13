@@ -45,8 +45,7 @@ After a few minutes, connect to your instance by using SSH as above. Then, run t
 sudo sysctl -a | grep fs.protected
 
 ```
-
-Tip: If you get an error running the below command, it’s because it has already been run and your resolv.conf is not a symlink.
+You should see that hardlinks and softlinks are set to 1.
 
 ### Step 2 - Setting up the Greengrass Group
 Next we’re going to set up the Greengrass group and we’re going to be using the AWS IoT Console to complete these steps. The group is how we control which devices can communicate with core as well as the available Lambdas and logging options.
