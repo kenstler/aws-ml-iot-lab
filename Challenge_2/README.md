@@ -197,6 +197,7 @@ sudo tar -xvf ./greengrass-ubuntu-x86-64-1.5.0.tar -C /
 
 if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar.gz (notice extension is .gz) then
 
+```
 sudo tar -zxvf greengrass-ubuntu-x86-64-1.5.0.tar.gz -C /
 ```
 
@@ -214,6 +215,7 @@ sudo nano /greengrass/config/config.json
 ```
 
 Your configuration file needs to look like the following, notice we specify the location of our Core’s certificates, the Root CA file to validate the identity of AWS IoT and our endpoint information:
+
 ```
 {
    "coreThing": {
