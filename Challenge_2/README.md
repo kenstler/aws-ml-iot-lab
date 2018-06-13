@@ -96,7 +96,7 @@ Click on roles and Create new role
 
 Select AWS Greengrass Role as the Service Role Type – you will have to scroll down to find it in the list.
 
-Select AWSGreengrassResourceAccessPolicy and CloudWatchLogsFullAccess policies and click Next. 
+Select AWSGreengrassResourceAccessRolePolicy and CloudWatchLogsFullAccess policies and click Next. 
 
 Enter a name for this role, let’s call it MLandIoTCoreRole
  
@@ -152,7 +152,7 @@ Click on Connectivity
  
 Click Edit
 
-Enter your endpoint information, for this workshop enter your Gateway IP address 
+Enter your endpoint information, for this workshop enter your Device IP address 
 
 Enter 8883 for the port.
 
@@ -164,38 +164,47 @@ You should see something similar with your Device IP address
 
 ### Step 6 - Installing Greengrass on the device
 
-In this step we’re going to take our software package and certificates and get them configured on our device 
+In this step we’re going to take our software package and certificates and get them configured on our Upsquared device 
 
-Copy the following to your Device :
+We will now copy the following to your Upsquared Device :
 
 MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/upsquared
 
-Copy the software zip file to /home/upsquared/
+Copy the Greengrass software (greengrass-ubuntu-x86-64-1.5.0.tar) file to /home/upsquared/
 
-From the downloads folder on your computer run:
+on your local machine, open terminal, change directory to where certs folder is. You can use SCP as below to copy certs and software to the upsquared device
+
+replace your_device_ip to the IP address of the device. You can get IP address of the device by linux command "ifconfig".
 
 ```
-scp MLandIoT_core.pem.crt upsquared@your_device_ip:/home/upsquared
-scp MLandIoT_core.pem.key upsquared@your_device_ip:/home/upsquared
-scp greengrass-linux-x86-64-1.5.x.tar.gz upsquared@your_device_ip:/home/upsquared
+scp MLandIoT_core.cert.pem  upsquared@your_device_ip:/home/upsquared/
+scp MLandIoT_core.private.key  upsquared@your_device_ip:/home/upsquared/
+
+scp greengrass-ubuntu-x86-64-1.5.0.tar upsquared@your_device_ip:/home/upsquared
 ```
 
-When asked for a password use “root”, the password for upsquared on the gateway 
+When asked for a password use “upsquared”, 
 
-Windows users please use Filezilla as shown earlier.
-
+Windows users can use Filezilla to transfer certs and installation software.
 
 On the Device terminal extract the tar.gz file to the root of your device.
 
+if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar (notice extension is .tar) then
+
 ```
-sudo tar -zxvf greengrass-linux-x86-64-1.5.x.tar.gz -C /
+sudo tar -xvf ./greengrass-ubuntu-x86-64-1.5.0.tar -C /
+```
+
+if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar.gz (notice extension is .gz) then
+
+sudo tar -zxvf greengrass-ubuntu-x86-64-1.5.0.tar.gz -C /
 ```
 
 Copy your certificate and private key to the greengrass certificate folder.
 
 ```
-sudo cp /home/upsquared/MLandIoT_core.pem.crt /greengrass/certs
-sudo cp /home/upsquared/MLandIoT_core.pem.key /greengrass/certs
+sudo cp /home/upsquared/MLandIoT_core.cert.pem /greengrass/certs
+sudo cp /home/upsquared/MLandIoT_core.private.key /greengrass/certs
 ```
 
 Next we need to edit our configuration file
@@ -209,8 +218,8 @@ Your configuration file needs to look like the following, notice we specify the 
 {
    "coreThing": {
        "caPath": "root-ca.pem",
-       "certPath": "MLandIoT_core.pem.crt",
-       "keyPath": "MLandIoT_core.pem.key",
+       "certPath": "MLandIoT_core.cert.pem",
+       "keyPath": "MLandIoT_core.private.key",
        "thingArn": "MLandIoT_Core ARN",
        "iotHost": "HOST_PREFIX_HERE.iot.AWS_REGION_HERE.amazonaws.com",
        "ggHost": "greengrass.iot.AWS_REGION_HERE.amazonaws.com",
@@ -240,11 +249,11 @@ Your final config file should look something like this:
 {
    "coreThing": {
        "caPath": "root-ca.pem",
-       "certPath": "MLandIoT_core.pem.crt",
-       "keyPath": "MLandIoT_core.pem.key",
-       "thingArn": "arn:aws:iot:us-west-2:xxxxxxxxx:thing/MLandIoT_Core",
-       "iotHost": "xxxxxxxx.iot.us-west-2.amazonaws.com",
-       "ggHost": "greengrass.iot.us-west-2.amazonaws.com",
+       "certPath": "MLandIoT_core.cert.pem",
+       "keyPath": "MLandIoT_core.private.key",
+       "thingArn": "arn:aws:iot:us-xxxx-x:xxxxxxxxx:thing/MLandIoT_Core",
+       "iotHost": "xxxxxxxx.iot.us-xxxx-x.amazonaws.com",
+       "ggHost": "greengrass.iot.us-xxxx-x.amazonaws.com",
        "keepAlive": 600
    },
    "runtime": {
@@ -257,16 +266,10 @@ Your final config file should look something like this:
 
 Lastly, we need to get a copy of the Root CA file for server identity verification.
 
-Enter this on your device to obtain a copy of the certificate:
+change directory to /greengrass/certs. Enter this on your device to obtain a copy of the certificate:
 
 ```
-wget -O /home/aws/root-ca.pem  https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
-```
-
-That will save a copy in your home folder for later labs but let’s also copy it to greengrass.
-
-```
-sudo cp /home/aws/root-ca.pem /greengrass/certs
+sudo wget -O root-ca.pem  https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
 ```
 
 ### Step 7 - Starting the Greengrass core
