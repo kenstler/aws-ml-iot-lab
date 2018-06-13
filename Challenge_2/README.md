@@ -164,23 +164,23 @@ You should see something similar with your Device IP address
 
 ### Step 6 - Installing Greengrass on the device
 
-In this step we’re going to take our software package and certificates and get them configured on our Intel NUC 
+In this step we’re going to take our software package and certificates and get them configured on our device 
 
 Copy the following to your Device :
 
-MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/nuc-user
+MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/upsquared
 
-Copy the software zip file to /home/nuc-user/
+Copy the software zip file to /home/upsquared/
 
 From the downloads folder on your computer run:
 
 ```
-scp MLandIoT_core.pem.crt nuc-user@your_device_ip:/home/nuc-user
-scp MLandIoT_core.pem.key nuc-user@your_device_ip:/home/nuc-user
-scp greengrass-linux-x86-64-1.5.x.tar.gz nuc-user@your_device_ip:/home/nuc-user
+scp MLandIoT_core.pem.crt upsquared@your_device_ip:/home/upsquared
+scp MLandIoT_core.pem.key upsquared@your_device_ip:/home/upsquared
+scp greengrass-linux-x86-64-1.5.x.tar.gz upsquared@your_device_ip:/home/upsquared
 ```
 
-When asked for a password use “root”, the password for nuc-user on the gateway 
+When asked for a password use “root”, the password for upsquared on the gateway 
 
 Windows users please use Filezilla as shown earlier.
 
@@ -194,8 +194,8 @@ sudo tar -zxvf greengrass-linux-x86-64-1.5.x.tar.gz -C /
 Copy your certificate and private key to the greengrass certificate folder.
 
 ```
-sudo cp /home/nuc-user/MLandIoT_core.pem.crt /greengrass/certs
-sudo cp /home/nuc-user/MLandIoT_core.pem.key /greengrass/certs
+sudo cp /home/upsquared/MLandIoT_core.pem.crt /greengrass/certs
+sudo cp /home/upsquared/MLandIoT_core.pem.key /greengrass/certs
 ```
 
 Next we need to edit our configuration file
@@ -257,7 +257,7 @@ Your final config file should look something like this:
 
 Lastly, we need to get a copy of the Root CA file for server identity verification.
 
-Enter this on your Intel NUC to obtain a copy of the certificate:
+Enter this on your device to obtain a copy of the certificate:
 
 ```
 wget -O /home/aws/root-ca.pem  https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
@@ -303,7 +303,7 @@ You should see messages similar to the following:
 
 ###Step 8 - Deploying the Greengrass Group
 
-Now that you have the core running, let’s deploy our group to the NUC.
+Now that you have the core running, let’s deploy our group to the device.
 
 On your group management page, click on Deployments
 
