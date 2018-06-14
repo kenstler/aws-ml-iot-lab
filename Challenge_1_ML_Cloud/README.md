@@ -20,16 +20,10 @@ sudo adduser --system ggc_user
 sudo addgroup --system ggc_group
 ```
 
-Next we’ll need SQL Lite 3, at this point your device might already have this dependency which is ok.
-
-```
-sudo apt-get install sqlite3 –y
-```
-
 Next we want to edit one of our boot scripts to make sure hardlink/softlink protection is enabled. Edit the following file:
 
 ```
-sudo nano /etc/sysctl.d/98-nuc.conf
+sudo nano /etc/sysctl.d/99-sysctl.conf
 ```
 
 This file is probably empty and you can just add these two lines.
@@ -45,14 +39,13 @@ If the above configuration file as correct you can proceed, if you had to add th
 sudo reboot now
 ```
 
-The final part of this first step is just because we’re running Ubuntu. We have to replace our symlinked resolv.conf file with a real file, including the same contents it currently has.
+After a few minutes, connect to your instance by using SSH as above. Then, run the following command to confirm the change.
 
 ```
-cd /etc
-sudo mv $(readlink /etc/resolv.conf) /etc/resolv.conf
-```
+sudo sysctl -a | grep fs.protected
 
-Tip: If you get an error running the below command, it’s because it has already been run and your resolv.conf is not a symlink.
+```
+You should see that hardlinks and softlinks are set to 1.
 
 ### Step 2 - Setting up the Greengrass Group
 Next we’re going to set up the Greengrass group and we’re going to be using the AWS IoT Console to complete these steps. The group is how we control which devices can communicate with core as well as the available Lambdas and logging options.
@@ -103,7 +96,7 @@ Click on roles and Create new role
 
 Select AWS Greengrass Role as the Service Role Type – you will have to scroll down to find it in the list.
 
-Select AWSGreengrassResourceAccessPolicy and CloudWatchLogsFullAccess policies and click Next. 
+Select AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AWSSagemakerFullAccess policies and click Next
 
 Enter a name for this role, let’s call it MLandIoTCoreRole
  
@@ -159,7 +152,7 @@ Click on Connectivity
  
 Click Edit
 
-Enter your endpoint information, for this workshop enter your Gateway IP address 
+Enter your endpoint information, for this workshop enter your Device IP address 
 
 Enter 8883 for the port.
 
@@ -171,38 +164,48 @@ You should see something similar with your Device IP address
 
 ### Step 6 - Installing Greengrass on the device
 
-In this step we’re going to take our software package and certificates and get them configured on our Intel NUC 
+In this step we’re going to take our software package and certificates and get them configured on our Upsquared device 
 
-Copy the following to your Device :
+We will now copy the following to your Upsquared Device :
 
-MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/nuc-user
+MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/upsquared
 
-Copy the software zip file to /home/nuc-user/
+Copy the Greengrass software (greengrass-ubuntu-x86-64-1.5.0.tar) file to /home/upsquared/
 
-From the downloads folder on your computer run:
+on your local machine, open terminal, change directory to where certs folder is. You can use SCP as below to copy certs and software to the upsquared device
+
+replace your_device_ip to the IP address of the device. You can get IP address of the device by linux command "ifconfig".
 
 ```
-scp MLandIoT_core.pem.crt nuc-user@your_device_ip:/home/nuc-user
-scp MLandIoT_core.pem.key nuc-user@your_device_ip:/home/nuc-user
-scp greengrass-linux-x86-64-1.5.x.tar.gz nuc-user@your_device_ip:/home/nuc-user
+scp MLandIoT_core.cert.pem  upsquared@your_device_ip:/home/upsquared/
+scp MLandIoT_core.private.key  upsquared@your_device_ip:/home/upsquared/
+
+scp greengrass-ubuntu-x86-64-1.5.0.tar upsquared@your_device_ip:/home/upsquared
 ```
 
-When asked for a password use “root”, the password for nuc-user on the gateway 
+When asked for a password use “upsquared”, 
 
-Windows users please use Filezilla as shown earlier.
-
+Windows users can use Filezilla to transfer certs and installation software.
 
 On the Device terminal extract the tar.gz file to the root of your device.
 
+if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar (notice extension is .tar) then
+
 ```
-sudo tar -zxvf greengrass-linux-x86-64-1.5.x.tar.gz -C /
+sudo tar -xvf ./greengrass-ubuntu-x86-64-1.5.0.tar -C /
+```
+
+if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar.gz (notice extension is .gz) then
+
+```
+sudo tar -zxvf greengrass-ubuntu-x86-64-1.5.0.tar.gz -C /
 ```
 
 Copy your certificate and private key to the greengrass certificate folder.
 
 ```
-sudo cp /home/nuc-user/MLandIoT_core.pem.crt /greengrass/certs
-sudo cp /home/nuc-user/MLandIoT_core.pem.key /greengrass/certs
+sudo cp /home/upsquared/MLandIoT_core.cert.pem /greengrass/certs
+sudo cp /home/upsquared/MLandIoT_core.private.key /greengrass/certs
 ```
 
 Next we need to edit our configuration file
@@ -212,12 +215,13 @@ sudo nano /greengrass/config/config.json
 ```
 
 Your configuration file needs to look like the following, notice we specify the location of our Core’s certificates, the Root CA file to validate the identity of AWS IoT and our endpoint information:
+
 ```
 {
    "coreThing": {
        "caPath": "root-ca.pem",
-       "certPath": "MLandIoT_core.pem.crt",
-       "keyPath": "MLandIoT_core.pem.key",
+       "certPath": "MLandIoT_core.cert.pem",
+       "keyPath": "MLandIoT_core.private.key",
        "thingArn": "MLandIoT_Core ARN",
        "iotHost": "HOST_PREFIX_HERE.iot.AWS_REGION_HERE.amazonaws.com",
        "ggHost": "greengrass.iot.AWS_REGION_HERE.amazonaws.com",
@@ -247,11 +251,11 @@ Your final config file should look something like this:
 {
    "coreThing": {
        "caPath": "root-ca.pem",
-       "certPath": "MLandIoT_core.pem.crt",
-       "keyPath": "MLandIoT_core.pem.key",
-       "thingArn": "arn:aws:iot:us-west-2:xxxxxxxxx:thing/MLandIoT_Core",
-       "iotHost": "xxxxxxxx.iot.us-west-2.amazonaws.com",
-       "ggHost": "greengrass.iot.us-west-2.amazonaws.com",
+       "certPath": "MLandIoT_core.cert.pem",
+       "keyPath": "MLandIoT_core.private.key",
+       "thingArn": "arn:aws:iot:us-xxxx-x:xxxxxxxxx:thing/MLandIoT_Core",
+       "iotHost": "xxxxxxxx.iot.us-xxxx-x.amazonaws.com",
+       "ggHost": "greengrass.iot.us-xxxx-x.amazonaws.com",
        "keepAlive": 600
    },
    "runtime": {
@@ -264,16 +268,10 @@ Your final config file should look something like this:
 
 Lastly, we need to get a copy of the Root CA file for server identity verification.
 
-Enter this on your Intel NUC to obtain a copy of the certificate:
+change directory to /greengrass/certs. Enter this on your device to obtain a copy of the certificate:
 
 ```
-wget -O /home/aws/root-ca.pem  https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
-```
-
-That will save a copy in your home folder for later labs but let’s also copy it to greengrass.
-
-```
-sudo cp /home/aws/root-ca.pem /greengrass/certs
+sudo wget -O root-ca.pem  https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
 ```
 
 ### Step 7 - Starting the Greengrass core
@@ -310,7 +308,7 @@ You should see messages similar to the following:
 
 ###Step 8 - Deploying the Greengrass Group
 
-Now that you have the core running, let’s deploy our group to the NUC.
+Now that you have the core running, let’s deploy our group to the device.
 
 On your group management page, click on Deployments
 
@@ -331,14 +329,17 @@ Congrats on getting Greengrass running!
 
 
 ### Lambda setup:
-Per prerequisite step#5. Download Lambda zip file from “LINK to be given during lab”
-You can download it using firefox browser on the Ubuntu desktop
+Download Lambda zip file greengrassSagemakerInference.zip located in same github.
+Unzip the file on your machine.
+Open greengrassSagemakerInference.py, check line #24, endpoint_name = 'xxxxx', replace xxxx with actual SagemakerEndpoint you created during Sagemaker prechallenge lab.
+Save the file.
+Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. We will use this zip file to create lambda.
 
 Deploy Lambda (GG Group Settings with the new Lambda and Resources)
 
 In AWS IOT Greengrass console. Click on the Grassgrass group which you have created earlier.
 
-1.	Greengrass -> Groups -> "GGObjectClassificationGroup" -> Add Lambda
+1.	Greengrass -> Groups -> "MLandIoTCoreRole" -> Add Lambda
 2.	Click on Lambda -> Add Lambda -> Create new Lambda
 
 Name		: greengrassSagemakerInference
@@ -348,48 +349,57 @@ Role		: Choose an existing role
 
 Exiting role	: service-role/lambda_basic_execution
 
+hit creat lambda button.
+In next screen, under function code, choose Code entry type as "Upload a .zip file"
 Upload greengrassSagemakerInference.zip
  
 Handler	: "greengrassSagemakerInference.function_handler"
-    
-On the "Configure test event" dialog, keep the default settings and set "Event Name" as "TestEvent".
-Click "Create"
-Save Changes
-Publish the code via "Actions / Publish new version".
-Click on "Publish".
+
+Save lambda by clicking "Save" button on top.
+
+Lets publish this lambda function;
+
+Select Actions dropdownbox
+
+Click "Publish new version"
+keep Publish box empty, Click on "Publish".
 
 This will create version 1 for the new function. Now we can go back to Greengrass console to complete our group settings before the deployment.
 
 3.	Add Lambda to the Group
-Groups -> YourGroup -> Lambda -> Add Lambda -> Use exiting Lambda -> Your Lambda -> Version
+Groups -> MLandIoT -> Lambdas -> Add Lambda -> Use exiting Lambda -> greengrassSagemakerInference -> Version 1 ->Finish
+
+Under Groups -> Lambdas, select greengrassSagemakerInference. Click Edit button.
 
 Edit lambda memory limit and timeout like below
 
     - Memory limit: 96 mb
     - Timeout: 10 sec
     - Check "Make this function long-lived and keep it running indefinitely" 
+ 
+ Click "Update" to save the changes.
 	    	   
 4.	Add local dev resources for the camera access
+Under Groups -> MLandIoT ->Resources
+Select Add Resource
+
 o	Name this resource - webcam
 o	Local resource type – Device
 o	Device path - /dev/video0
 o	Specify the OS group used to access this resource: Select "Automatically add OS group"
 o	Select "Read and write access"
 
+Save
+
+Under Groups -> Lambdas, select greengrassSagemakerInference
 5.	Attach the resources to Lambda
 o	Add resources – select webcam
 
 6.	Add Subscriptions
 Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud and Topic as “ModelInference” 
 	 
-7.	Update service role
-Change AWS IAM -> Roles / 'GreengrassServiceRole' to include "AWSGreengrassResourceAccessPolicy", "AmazonS3ReadOnlyAccess" , AWSGreengrassFullAccess and AWSSagemakerFullAccess
- 
-8.	Attach Greengrass service role to the your Greengrass group
 
-Groups -> YourGroup -> Settings -> GroupRole -> Add Role
-
-9.	Deploy Greengrass group:
+7.	Deploy Greengrass group:
 
 Groups -> YourGroup -> Actions -> Deploy
 
