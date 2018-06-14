@@ -46,9 +46,23 @@ And click "Create notebook instance" on the bottom right. You should be re-direc
 
 ![Alt text](../screenshots/notebook_dashboard_0.png)
 
+### Add S3 Full Access to your SageMaker IAM Role
+
+While the notebook instance is launching, we're going to add full S3 permissions to the SageMaker Role we just created. Navigate to the IAM console through the search panel, and select "Roles" from the side-bar on the left. Search for the SageMaker Execution Role you just created:
+
+![Alt text](../screenshots/add_permissions_sm_0.png)
+
+Next, click "Attach Policy" and search for "AmazonS3FullAccess". Select this policy, and click "Attach Policy" at the bottom right of the screen.
+
+![Alt text](../screenshots/add_permissions_sm_1.png)
+
+You should now see this policy attached to your SageMaker Execution Role.
+
+![Alt text](../screenshots/add_permissions_sm_2.png)
+
 ### Creating an S3 Bucket
 
-While the notebook instance is launching, we're going to create an S3 bucket. S3 is an object storage service, and we'll use this bucket later to store crops of detected faces. To reach the S3 dashboard, click "Services" on the top left and type in "S3" into the search bar.
+While the notebook instance is still launching, we're going to create an S3 bucket. S3 is an object storage service, and we'll use this bucket later to store crops of detected faces. To reach the S3 dashboard, click "Services" on the top left and type in "S3" into the search bar.
 
 ![Alt text](../screenshots/search_s3_0.png)
 
