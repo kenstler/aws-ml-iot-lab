@@ -133,4 +133,4 @@ By the end of the notebook, you should have successfully launched a SageMaker en
 
 You can check this by going to your S3 bucket, where you'll find two objects uploaded to the bucket; the two face crops from the test image.
 
-You've now completed Challenge 1.
+You've now completed the Pre-Challenge.
