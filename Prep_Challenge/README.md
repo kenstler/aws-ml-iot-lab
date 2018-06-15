@@ -119,15 +119,7 @@ The markdown blocks are just there to provide accompanying documentation to the 
 
 The ipython kernel keeps track of the state of the code ran so far, so it's important to run code blocks sequentially from the top-down so it can process in the correct order. When you run a code block, the "In" next to the block indicates the state of the kernel; it will either show a "\*" to indicate that the code block is still processing, or it will show an integer that shows the order in which the blocks were run since the notebook was launched. (These are already there by default).
 
-Please proceed to run each code block, until you're told to return to these instructions
-
-Once you've reached **STOP**, you'll have seen the inference code and will likely have guessed that we need to insert the S3 bucket name you created into the "your-bucket-name" placeholder. To do this, go to the jupyter dashboard, and open "mxnet_ssd_face_detection_rekognition.py".
-
-The dashboard will then open a text editor. Once there, replace the "your-bucket" (highlighted) with the bucket name you created earlier:
-
-![Alt text](../screenshots/script_0.png)
-
-Once you've done that, save the document and close the window. Now, go back to the notebook and continue to run the rest of the code-cells.
+Please proceed to run each code block.
 
 By the end of the notebook, you should have successfully launched a SageMaker endpoint that is running inference with a face detection model, and have sent a test image to the endpoint. The endpoint will have returned the detections, but it also will push the face crops to S3.
 
