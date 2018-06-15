@@ -105,7 +105,7 @@ Next, close the terminal tab and go back to the dashboard. You should see a new 
 
 ![Alt text](../screenshots/jupyter_dashboard_2.png)
 
-Select that folder, then select the folder "Challenge_1". You should see contents similar to this:
+Select that folder, then select the folder "Prep_Challenge". You should see contents similar to this:
 
 ![Alt text](../screenshots/jupyter_dashboard_3.png)
 
