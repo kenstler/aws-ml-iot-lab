@@ -96,7 +96,7 @@ Click on roles and Create new role
 
 Select AWS Greengrass Role as the Service Role Type – you will have to scroll down to find it in the list.
 
-Select AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AWSSagemakerFullAccess policies and click Next
+Select AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AmazonSagemakerFullAccess policies and click Next
 
 Enter a name for this role, let’s call it MLandIoTCoreRole
  
