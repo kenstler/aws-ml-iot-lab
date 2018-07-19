@@ -2,13 +2,14 @@
 
 ## Summary
 
-Now that you have a face-detection model on a SageMaker endpoint, we can leverage that endpoint to build out an ML/IoT pipeline for our app that does all the inference in the cloud. By running inference in the cloud, we're able to use accurate models at a rapid pace by leveraging powerful computational instances like C5.
+Now that you have a face-detection model on a SageMaker endpoint, you can leverage that endpoint to build out a ML/IoT pipeline for your app that does all the inference in the cloud. By running the inference in the cloud, you are able to use accurate models at a rapid pace by leveraging powerful computational instances like the C5 instance type.
 
-In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You'll build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time, including AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
+In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You will also build out the rest of the pipeline that is necessary to create a dashboard for tracking crowd emotions in real-time. This will include using the following AWS services: AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
 
 ## Instructions
 
-## Configure GreenGrass on IoT Device
+### Configure GreenGrass on IoT Device
+
 In this part of the lab we’re we will walk you through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
 
 ### Step 1 - Setting up the hardware	
