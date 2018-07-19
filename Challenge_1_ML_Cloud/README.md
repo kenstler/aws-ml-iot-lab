@@ -52,24 +52,24 @@ This connection will allow you to enter commands on the device via copying and p
 
 ### Configure GreenGrass on IoT Device
 
-In this part of the lab we’re we will walk you through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
+In this part of the lab you will walk through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
 
 ### Step 1 - Setting up the hardware	
 There are a few things the device is going to need set up at an operating system level to support Greengrass.
-We need to add a user and group for Greengrass to use. SSH into your device and run the following commands:
+You need to add a user and group for Greengrass to use. SSH into your device and run the following commands:
 
 ```
 sudo adduser --system ggc_user
 sudo addgroup --system ggc_group
 ```
 
-Next we want to edit one of our boot scripts to make sure hardlink/softlink protection is enabled. Edit the following file:
+Next you want to edit one of our boot scripts to make sure hardlink/softlink protection is enabled. Edit the following file:
 
 ```
 sudo nano /etc/sysctl.d/99-sysctl.conf
 ```
 
-This file is probably empty and you can just add these two lines.
+This file may or may not be empty, go to the bottom of the file and see if these 2 lines exist. If they do, nothing further is needed. If they do not, add them.
 
 ```
 fs.protected_hardlinks = 1
@@ -93,15 +93,15 @@ You should see that hardlinks and softlinks are set to 1.
 ### Step 2 - Setting up the Greengrass Group
 Next we’re going to set up the Greengrass group and we’re going to be using the AWS IoT Console to complete these steps. The group is how we control which devices can communicate with core as well as the available Lambdas and logging options.
 
-Log into the AWS IoT Console  (aws.amazon.com) and click on Greengrass, and select “Groups” from the left hand menu. 
+Log into the AWS IoT Console  (aws.amazon.com) and click on "Services" then in the search bar enter: "Greengrass" and click "Greengrass" in the dropdown. Next select “Groups” from the left hand menu. 
 
-Select “Create first Group”.
+Select “Create first Group” or "Create Group".
 
-Select “Easy Group Creation”.
+Select “Easy Group Creation” by clicking "Use easy creation".
 
-Enter a group name, let’s use “MLandIoT”
+Enter a group name, use “MLandIoT” then click "Next".
 
- Keep the same core name, “MLandIoT_Core”
+Keep the same core name, “MLandIoT_Core” by clicking "Next".
  
 Select “Create Group and Core”.
 
@@ -118,11 +118,13 @@ When you download the certificates, they will have names such as: xxxxxxxxx-cert
 Rename xxxxxxx-certificate.pem.crt to MLandIoT_core.pem.crt
 Rename xxxxxxx-private.pem.key to MLandIoT_core.pem.key
 
-It is recommended that you create a working directory to keep all of your files in one place. 
-Next, let’s download the Greengrass software for our device:
-Select the x86_64 software package and click the download button.
  
-Download all certificates
+Download all certificates by clicking the download button on the page.
+
+It is recommended that you create a working directory to keep all of your files in one place. 
+
+Next, download the Greengrass software for our device:
+Select the x86_64 software package and click the download button.
 
 Download Greengrass Core software software (Download Greengrass version 1.5.0, choose x86_64)
 
@@ -133,49 +135,41 @@ You can now click the Finish button. You will see the following un-deployed grou
 
 You need a role attached to your Greengrass group that gives additional permissions to the core to be able to directly access various AWS services.
 
-Navigate to aws.amazon.com and open the Identity and Access Management console (IAM)
+In the top of the console, click "Services", in the search bar enter "IAM" and click the first item from the dropdown.
  
 Click on roles and Create new role
 
-Select AWS Greengrass Role as the Service Role Type – you will have to scroll down to find it in the list.
+Select AWS Greengrass Role as the Service Role Type, then click "Next Permissions".
 
-Select AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AmazonSagemakerFullAccess policies and click Next
+Enter the following values one at a time, then click to enable them: AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AmazonSagemakerFullAccess policies and click "Next: Review".
 
 Enter a name for this role, let’s call it MLandIoTCoreRole
  
 Click Create Role
 
-Next we’re going to attach this role to our new Greengrass group.
+Next you are going to attach this role to the new Greengrass group.
 
-Open the AWS IoT console
+Open the AWS IoT console, by going back to the Greengrass service page ( searchbar to find it).
 
 Click on Greengrass > Groups and select the MLandIoT group
 
-Click on Settings, you can see we have no Group Role
-
-Click on Add Role
-
- 
+Click on "Add Role" in the top corner of the settings page.
 
 Pick our service role, MLandIoTCoreRole and click Save
  
 ### Step 4 - Set up logging
 
-We can set up logging so that all logs on the Greengrass core are sent to CloudWatch logs. This includes the logs from the operation of the core as well as the logs from our Lambda functions which are extremely useful to have.
+You can set up logging so that all logs on the Greengrass core are sent to CloudWatch logs. This includes the logs from the operation of the core as well as the logs from the Lambda functions which are extremely useful to have.
 
-
-Under CloudWatch logs configuration click Edit
+While on the settings page scroll to until you see "CloudWatch logs configuration" then click "Edit".
 
 Click on Add another log type
-
  
 Select User Lambdas and Greengrass system
 
 Click Update
 
- 
 Keep the log settings as Informational
-
  
 Click Save
 
@@ -207,9 +201,9 @@ You should see something similar with your Device IP address
 
 ### Step 6 - Installing Greengrass on the device
 
-In this step we’re going to take our software package and certificates and get them configured on our Upsquared device 
+In this step you are going to take the software package and certificates and get them configured on the Upsquared device 
 
-We will now copy the following to your Upsquared Device :
+You will now copy the following to your Upsquared Device :
 
 MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/upsquared
 
@@ -223,7 +217,7 @@ replace your_device_ip to the IP address of the device. You can get IP address o
 scp MLandIoT_core.cert.pem  upsquared@your_device_ip:/home/upsquared/
 scp MLandIoT_core.private.key  upsquared@your_device_ip:/home/upsquared/
 
-scp greengrass-ubuntu-x86-64-1.5.0.tar upsquared@your_device_ip:/home/upsquared
+scp greengrass-linux-x86-64-1.5.0.tar.gz upsquared@your_device_ip:/home/upsquared
 ```
 
 When asked for a password use “upsquared”, 
@@ -232,16 +226,8 @@ Windows users can use Filezilla to transfer certs and installation software.
 
 On the Device terminal extract the tar.gz file to the root of your device.
 
-if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar (notice extension is .tar) then
-
 ```
-sudo tar -xvf ./greengrass-ubuntu-x86-64-1.5.0.tar -C /
-```
-
-if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar.gz (notice extension is .gz) then
-
-```
-sudo tar -zxvf greengrass-ubuntu-x86-64-1.5.0.tar.gz -C /
+sudo tar -zxvfgreengrass-linux-x86-64-1.5.0.tar.gz -C /
 ```
 
 Copy your certificate and private key to the greengrass certificate folder.
@@ -251,7 +237,7 @@ sudo cp /home/upsquared/MLandIoT_core.cert.pem /greengrass/certs
 sudo cp /home/upsquared/MLandIoT_core.private.key /greengrass/certs
 ```
 
-Next we need to edit our configuration file
+Next you need to edit our configuration file
 
 ```
 sudo nano /greengrass/config/config.json
@@ -309,7 +295,7 @@ Your final config file should look something like this:
 }
 ```
 
-Lastly, we need to get a copy of the Root CA file for server identity verification.
+Lastly, you need to get a copy of the Root CA file for server identity verification.
 
 change directory to /greengrass/certs. Enter this on your device to obtain a copy of the certificate:
 
@@ -319,8 +305,8 @@ sudo wget -O root-ca.pem  https://www.symantec.com/content/en/us/enterprise/veri
 
 ### Step 7 - Starting the Greengrass core
 
-We are now ready to run the Greengrass Core! Once we see that it is running we will then deploy the group configuration from the console.
-To make the next steps easier I suggest running as root.
+You are now ready to run the Greengrass Core! Once we see that it is running you will then deploy the group configuration from the console.
+To make the next steps easier it is recommended to run the commands as root.
 ```
 sudo su
 cd /greengrass/ggc/core
@@ -351,7 +337,7 @@ You should see messages similar to the following:
 
 ###Step 8 - Deploying the Greengrass Group
 
-Now that you have the core running, let’s deploy our group to the device.
+Now that you have the core running, deploy our group to the device.
 
 On your group management page, click on Deployments
 
