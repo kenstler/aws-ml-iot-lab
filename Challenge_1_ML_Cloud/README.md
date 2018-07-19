@@ -6,6 +6,8 @@ Now that you have a face-detection model on a SageMaker endpoint, you can levera
 
 In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You will also build out the rest of the pipeline that is necessary to create a dashboard for tracking crowd emotions in real-time. This will include using the following AWS services: AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
 
+If at any point you experience problems, raise your hand to get an instructor or attendant to help you.
+
 ## Instructions
 
 ### Initial Information:
@@ -21,15 +23,31 @@ If you are on Windows please make sure you have [Putty](https://www.ssh.com/ssh/
 To find your device's IP address login to the device with the username and password above and enter the following command:
 
 ```
-ipconfig
+ifconfig
 ```
 
 Look for output like this:
 
 ```
+wlp4s0    Link encap:Ethernet  HWaddr 70:1c:e7:a4:59:8e
+          inet addr:192.168.1.141  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::721c:e7ff:fea4:598e/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:17849 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8811 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:21227113 (21.2 MB)  TX bytes:947013 (947.0 KB)
 ```
 
-Indicating that your IP address is: ` `
+Indicating that your IP address is: `192.168.1.141`
+
+Then on your computer enter the following to connect(when prompted enter the password and press enter):
+
+```
+ssh upsquared@192.168.1.141
+```
+
+This connection will allow you to enter commands on the device via copying and pasting for example. If you have any problems with this please raise your hand for an instructor. 
 
 
 ### Configure GreenGrass on IoT Device
