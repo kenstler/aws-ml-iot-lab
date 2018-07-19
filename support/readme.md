@@ -80,6 +80,7 @@ Remove the Greengrass user and group:
 ```shell
 sudo groupdel ggc_group
 sudo userdel ggc_user
+sudo rm -rf /home/ggc_user
 ```
 
 Or to make this super simple since you've cloned the support repo:
