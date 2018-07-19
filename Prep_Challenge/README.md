@@ -127,4 +127,4 @@ You can check this by going to your S3 bucket, where you'll find two objects upl
 
 You've now completed the Pre-Challenge!
 
-To continue, start [Challenge 1](Challenge_1_ML_Cloud/README.md)
+To continue, start [Challenge 1](../Challenge_1_ML_Cloud/README.md)
