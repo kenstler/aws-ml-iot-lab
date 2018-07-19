@@ -11,8 +11,25 @@ In this challenge, you will configure an IoT device to act as a smart camera, wh
 ### Initial Information:
 
 Username: `upsquared`
+
 Password: `upsquared`
 
+To make the lab much easier, it is recommended that you connect to your device via SSH. To do that you'll need an SSH client and the IP address.
+
+If you are on Windows please make sure you have [Putty](https://www.ssh.com/ssh/putty/windows/install) installed. If you are using MacOS or Linux this is already installed for you.
+
+To find your device's IP address login to the device with the username and password above and enter the following command:
+
+```
+ipconfig
+```
+
+Look for output like this:
+
+```
+```
+
+Indicating that your IP address is: ` `
 
 
 ### Configure GreenGrass on IoT Device

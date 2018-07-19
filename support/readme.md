@@ -10,15 +10,60 @@ When these kits arive they are missing:
 
 The following instructions and scripts [here](https://github.com/chrisking/upsquaredsetup) cover everything that is needed to patch the kits via automation or with specific commands.
 
+## Triaging Network Connectivity
+
+If the device will not connect to the network remove the following lines from `/etc/network/interfaces`
+
+```
+        wpa-ssid MYSSID
+        wpa-psk fun_key_here
+```
+
+Then enter the following command with the values changed for the SSID and passkey:
+
+```
+wpa_passphrase MYSSID MySecretPassphrase | grep -vE "{|#|}" | tr -d '\t' | sudo tee -a /etc/network/interfaces
+```
+
+## Loading Support Content Onto the Device:
+
+It is a good idea to keep a local copy of the lab content and the support content on the device, to do so enter the following:
+
+```
+sudo mkdir /labs
+sudo chown -R upsquared /labs
+cd /labs
+git clone https://github.com/chrisking/upsquaredsetup.git
+git clone https://github.com/chrisking/aws-ml-iot-lab.git
+```
 
 ## After Lab Cleanup
 
 Before packing the UpSquared devices into their boxes for the next lab, the systems must be restored to a clean state. This process has been automated via a script provided below but the rough directions are below if they need to be performed manually
 
+Removing all Greengrass content from the home directory:
+```
+cd ~/
+rm greengrass-ubuntu*.*
+rm ML*.*
 ```
 
+Remove the Greengrass directories:
+```
+sudo rm -rf /greengrass
 ```
 
+Remove the Greengrass user and group:
+```
+sudo groupdel ggc_group
+sudo userdel ggc_user
+```
+
+Or to make this super simple since you've cloned the support repo:
+
+```
+sudo ./labs/aws-ml-iot-lab/support/cleanup.sh
+```
 
 ## Full Restore ( Worst Case )
 
