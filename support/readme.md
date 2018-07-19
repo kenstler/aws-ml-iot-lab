@@ -74,6 +74,20 @@ Or to make this super simple since you've cloned the support repo:
 sudo /labs/aws-ml-iot-lab/support/cleanup.sh
 ```
 
+## Super Simple Clean
+
+To do the clean without checking out any code, just enter one of the following commands directly on the device.
+
+```
+sudo sh -c "$(curl -fsSL https://bit.ly/2mvLyS9)"
+```
+
+or 
+
+```
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/chrisking/upsquaredsetup/master/setup.sh)"
+```
+
 ## Full Restore ( Worst Case )
 
 The absolute worst case scenario is a bricked device or the passwords have been changed. If that occurs find a local Linux Desktop( a Deep Lens would work in a pinch) or a local Linux VM with a Desktop and a 16GB or greater USB drive.
