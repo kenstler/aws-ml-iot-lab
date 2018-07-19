@@ -32,9 +32,11 @@ Next, click the orange "Create notebook instance" box on the panel in the upper-
 Amazon SageMaker provides pre-built fully managed notebook instances that run Jupyter notebooks. Here, you are going to configure your notebook server:
 * Under Notebook instance name: Enter a name for your notebook instance
 * Under Notebook instance type: Select an instance type (recommend using default "ml.t2.medium")
-* Under IAM Role: Select "Create a new role"
+* Under IAM Role: Select "Create a new role" (you will need to click the existing entry first to view the dropdown.)
 
-When you click "Create a new role", a pop-up window will appear that will let you configure S3 access for your SageMaker IAM role. Please select "Any S3 bucket", then "Create role".
+When you click "Create a new role", a pop-up window will appear that will let you configure S3 access for your SageMaker IAM role. Please select "Any S3 bucket", then "Create role". Take a note of the role name that you just created, you will need it later.
+
+For example it might be: `AmazonSageMaker-ExecutionRole-20180719T160038`
 
 ![Alt text](../screenshots/create_iam_role_0.png)
 
@@ -64,6 +66,8 @@ You should now see this policy attached to your SageMaker Execution Role.
 
 While the notebook instance is still launching, you are going to create an S3 bucket. S3 is an object storage service, and you will use this bucket later to store crops of detected faces. To reach the S3 dashboard, click "Services" on the top left and type in "S3" into the search bar.
 
+Bucket names are required to be unique so start with something like `ml-iot-lab-your-name-here`. Also note the bucket name down as well for use later.
+
 ![Alt text](../screenshots/search_s3_0.png)
 
 Once there click "Create bucket":
@@ -84,13 +88,13 @@ Let's navigate back to the SageMaker console in the same way we got to the S3 co
 
 ### Deploying the Face-detection Model
 
-Once back in the SageMaker console, select the "Notebook" tab from the sidebar on the left. You should see the same notebook screen as before, only now instead of "Pending", the status should read "InService" (if not, please wait a bit longer). Next, click "Open" under "Actions" to open your notebook instance.
+Once back in the SageMaker console, select the "Notebook Instances" link from the sidebar on the left. You should see the same notebook screen as before, only now instead of "Pending", the status should read "InService" (if not, please wait a bit longer). Next, click "Open" under "Actions" to open your notebook instance.
 
 ![Alt text](../screenshots/notebook_dashboard_1.png)
 
 You'll be redirected to the notebook instance, and will land in the jupyter notebook dashboard. From here, you can navigate through your local filesystem, open and edit notebooks, text files, terminals, etc. By default, you'll have two directories: "lost+found" and "sample-notebooks", the latter of which contains a litany of examples for building, training, and deploying algorithms on SageMaker.
 
-The "New" tab on the top right can be used to create new files, as well as open up a terminal window through the dashboard. We need to clone a github repository, so let's open up a new terminal:
+The "New" tab on the top right can be used to create new files, as well as open up a terminal window through the dashboard. We need to clone a github repository, so let's open up a new terminal by clicking "New" then clicking "Terminal" in the bottom of the list.
 
 ![Alt text](../screenshots/jupyter_dashboard_1.png)
 
