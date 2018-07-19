@@ -105,7 +105,7 @@ git clone https://github.com/kenstler/aws-ml-iot-lab.git
 ```
 ![Alt text](../screenshots/terminal_0.png)
 
-Next, close the terminal tab and go back to the dashboard. You should see a new folder, "aws-ml-iot-lab". 
+Next, close the terminal tab and go back to the dashboard. You should see a new folder, "aws-ml-iot-lab". You can close it by simply closing the browser tab that was opened.
 
 ![Alt text](../screenshots/jupyter_dashboard_2.png)
 
@@ -123,7 +123,7 @@ The markdown blocks are just there to provide accompanying documentation to the 
 
 The ipython kernel keeps track of the state of the code ran so far, so it's important to run code blocks sequentially from the top-down so it can process in the correct order. When you run a code block, the "In" next to the block indicates the state of the kernel; it will either show a "\*" to indicate that the code block is still processing, or it will show an integer that shows the order in which the blocks were run since the notebook was launched. (These are already there by default).
 
-Please proceed to run each code block.
+Please proceed to run each code block, while doing so read the content in the Markdown sections carefully. There is a block of Python code where you will want to enter in your own S3 bucket. All the instructions are on the page in the notebook however.
 
 By the end of the notebook, you should have successfully launched a SageMaker endpoint that is running inference with a face detection model, and have sent a test image to the endpoint. The endpoint will have returned the detections, but it also will push the face crops to S3.
 
