@@ -2,6 +2,20 @@
 
 This file contains instructions for lab setup of all devices and cleanup after the first time devices have been used. Also there are a few useful scripts here as well. 
 
+## Super Simple Clean
+
+To do the clean without checking out any code, just enter one of the following commands directly on the device.
+
+```
+sudo sh -c "$(curl -fsSL https://bit.ly/2mvLyS9)"
+```
+
+or 
+
+```
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/chrisking/upsquaredsetup/master/setup.sh)"
+```
+
 ## Configuring the Device ( first time )
 
 When these kits arive they are missing:
@@ -74,19 +88,6 @@ Or to make this super simple since you've cloned the support repo:
 sudo /labs/aws-ml-iot-lab/support/cleanup.sh
 ```
 
-## Super Simple Clean
-
-To do the clean without checking out any code, just enter one of the following commands directly on the device.
-
-```
-sudo sh -c "$(curl -fsSL https://bit.ly/2mvLyS9)"
-```
-
-or 
-
-```
-sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/chrisking/upsquaredsetup/master/setup.sh)"
-```
 
 ## Full Restore ( Worst Case )
 
