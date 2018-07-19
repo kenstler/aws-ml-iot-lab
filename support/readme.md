@@ -37,6 +37,15 @@ git clone https://github.com/chrisking/upsquaredsetup.git
 git clone https://github.com/chrisking/aws-ml-iot-lab.git
 ```
 
+If the content is already in `/labs` on the device enter the following to ensure it is up to date.
+
+```
+cd /labs/aws-ml-iot-lab
+git pull origin master
+cd /labs/upsquaredsetup
+git pull origin master
+```
+
 ## After Lab Cleanup
 
 Before packing the UpSquared devices into their boxes for the next lab, the systems must be restored to a clean state. This process has been automated via a script provided below but the rough directions are below if they need to be performed manually
