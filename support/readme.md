@@ -1,6 +1,6 @@
 # Support
 
-This file contains instructions for Lab Setup of all devices and cleanup after the first time devices have been used. Also there are a few useful scripts here as well. 
+This file contains instructions for lab setup of all devices and cleanup after the first time devices have been used. Also there are a few useful scripts here as well. 
 
 ## Configuring the Device ( first time )
 
@@ -27,7 +27,7 @@ wpa_passphrase MYSSID MySecretPassphrase | grep -vE "{|#|}" | tr -d '\t' | sudo 
 
 ## Loading Support Content Onto the Device:
 
-It is a good idea to keep a local copy of the lab content and the support content on the device, to do so enter the following:
+It is a good idea to keep a local copy of the lab content and all supporting content on the device, to do so enter the following:
 
 ```
 sudo mkdir /labs
