@@ -2,11 +2,11 @@
 
 ## Summary
 
-The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. We'll be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, we're going to pre-process images with the face-detection model to:
+The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. You will be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, you are going to pre-process images with the face-detection model to:
 * Only send images to Rekognition when a face is detected
 * Only send the actual face crop itself
 
-This limits both the number of API calls we make, as well as the size of content we send.
+This limits both the number of API calls you make, as well as the size of content you send.
 
 In this challenge, you will use SageMaker in your efforts to deploy a face-detection model. You will first launch a SageMaker notebook instance; from your notebook, you will be able to explore the data your model will train on, see how the model is trained, and deploy a pre-trained model to an inference endpoint. You will also create an S3 bucket for the endpoint to store detected faces, which you will need as part of your app's pipeline.
 
@@ -21,7 +21,7 @@ Next, at the home console screen, type in "SageMaker" into the search bar and cl
 ![Alt text](../screenshots/console_0.png)
 
 Next, you should find yourself at the Amazon SageMaker home page (if not, click "Amazon SageMaker" on the top left sidebar).
-Please click the drop-down menu between your account name and "Support" and select "US East (N. Virginia)". Many resources we will be using in this workshop are in region **us-east-1**, so we need to make sure we launch SageMaker services in the same region.
+Please click the drop-down menu between your account name and "Support" and select "US East (N. Virginia)". Many resources you will be using in this workshop are in region **us-east-1**, so you need to make sure you launch SageMaker services in the same region.
 
 ![Alt text](../screenshots/sagemaker_home_0.png)
 
@@ -29,7 +29,7 @@ Next, click the orange "Create notebook instance" box on the panel in the upper-
 
 ![Alt text](../screenshots/create_nb_instance_0.png)
 
-Amazon SageMaker provides pre-built fully managed notebook instances that run Jupyter notebooks. Here, we're going to configure our notebook server:
+Amazon SageMaker provides pre-built fully managed notebook instances that run Jupyter notebooks. Here, you are going to configure your notebook server:
 * Under Notebook instance name: Enter a name for your notebook instance
 * Under Notebook instance type: Select an instance type (recommend using default "ml.t2.medium")
 * Under IAM Role: Select "Create a new role"
@@ -48,7 +48,7 @@ And click "Create notebook instance" on the bottom right. You should be re-direc
 
 ### Add S3 Full Access to your SageMaker IAM Role
 
-While the notebook instance is launching, we're going to add full S3 permissions to the SageMaker Role we just created. Navigate to the IAM console through the search panel, and select "Roles" from the side-bar on the left. Search for the SageMaker Execution Role you just created:
+While the notebook instance is launching, you are going to add full S3 permissions to the SageMaker Role you just created. Navigate to the IAM console through the search panel, and select "Roles" from the side-bar on the left. Search for the SageMaker Execution Role you just created:
 
 ![Alt text](../screenshots/add_permissions_sm_0.png)
 
@@ -62,7 +62,7 @@ You should now see this policy attached to your SageMaker Execution Role.
 
 ### Creating an S3 Bucket
 
-While the notebook instance is still launching, we're going to create an S3 bucket. S3 is an object storage service, and we'll use this bucket later to store crops of detected faces. To reach the S3 dashboard, click "Services" on the top left and type in "S3" into the search bar.
+While the notebook instance is still launching, you are going to create an S3 bucket. S3 is an object storage service, and you will use this bucket later to store crops of detected faces. To reach the S3 dashboard, click "Services" on the top left and type in "S3" into the search bar.
 
 ![Alt text](../screenshots/search_s3_0.png)
 
@@ -78,7 +78,7 @@ Click "Create" at the bottom left.
 
 ![Alt text](../screenshots/create_bucket_1.png)
 
-Great, now you've created a bucket for storing face crops. Keep track of the name of the bucket, as we'll be using it shortly. 
+Great, now you've created a bucket for storing face crops. Keep track of the name of the bucket, as you will be using it shortly. 
 
 Let's navigate back to the SageMaker console in the same way we got to the S3 console, by clicking the "Services" tab and searching "Sagemaker".
 
@@ -115,7 +115,7 @@ Next, click on "SSD_Face_Detection_SageMaker_Endpoint.ipynb" to open up the note
 
 A Jupyter notebook is an interactive document that processes code blocks and produces output, and is commonly used in data exploration and experimentation. You can navigate through the code blocks using the arrow keys; the code block you're currently on will be highlighted in a box with a blue edge. You'll notice that there are two kinds of blocks, markdown blocks and code blocks. 
 
-The markdown blocks are just there to provide accompanying documentation to the notebook, but we actually want to run the code blocks. To do this, simply click **Control+Return** while over a code block. This sends the code block to an ipython kernel that runs the code sequentially like a script, and returns output, if any. 
+The markdown blocks are just there to provide accompanying documentation to the notebook, but you actually want to run the code blocks. To do this, simply click **Control+Return** while over a code block. This sends the code block to an ipython kernel that runs the code sequentially like a script, and returns output, if any. 
 
 The ipython kernel keeps track of the state of the code ran so far, so it's important to run code blocks sequentially from the top-down so it can process in the correct order. When you run a code block, the "In" next to the block indicates the state of the kernel; it will either show a "\*" to indicate that the code block is still processing, or it will show an integer that shows the order in which the blocks were run since the notebook was launched. (These are already there by default).
 
@@ -125,4 +125,6 @@ By the end of the notebook, you should have successfully launched a SageMaker en
 
 You can check this by going to your S3 bucket, where you'll find two objects uploaded to the bucket; the two face crops from the test image.
 
-You've now completed the Pre-Challenge.
+You've now completed the Pre-Challenge!
+
+To continue, start [Challenge 1](Challenge_1_ML_Cloud/README.md)

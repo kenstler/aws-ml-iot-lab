@@ -21,7 +21,7 @@ If the device will not connect to the network remove the following lines from `/
 
 Then enter the following command with the values changed for the SSID and passkey:
 
-```
+```shell
 wpa_passphrase MYSSID MySecretPassphrase | grep -vE "{|#|}" | tr -d '\t' | sudo tee -a /etc/network/interfaces
 ```
 
@@ -29,7 +29,7 @@ wpa_passphrase MYSSID MySecretPassphrase | grep -vE "{|#|}" | tr -d '\t' | sudo 
 
 It is a good idea to keep a local copy of the lab content and all supporting content on the device, to do so enter the following:
 
-```
+```shell
 sudo mkdir /labs
 sudo chown -R upsquared /labs
 cd /labs
@@ -39,7 +39,7 @@ git clone https://github.com/chrisking/aws-ml-iot-lab.git
 
 If the content is already in `/labs` on the device enter the following to ensure it is up to date.
 
-```
+```shell
 cd /labs/aws-ml-iot-lab
 git pull origin master
 cd /labs/upsquaredsetup
@@ -51,26 +51,26 @@ git pull origin master
 Before packing the UpSquared devices into their boxes for the next lab, the systems must be restored to a clean state. This process has been automated via a script provided below but the rough directions are below if they need to be performed manually
 
 Removing all Greengrass content from the home directory:
-```
+```shell
 cd ~/
 rm greengrass-ubuntu*.*
 rm ML*.*
 ```
 
 Remove the Greengrass directories:
-```
+```shell
 sudo rm -rf /greengrass
 ```
 
 Remove the Greengrass user and group:
-```
+```shell
 sudo groupdel ggc_group
 sudo userdel ggc_user
 ```
 
 Or to make this super simple since you've cloned the support repo:
 
-```
+```shell
 sudo /labs/aws-ml-iot-lab/support/cleanup.sh
 ```
 
