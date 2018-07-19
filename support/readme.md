@@ -71,7 +71,7 @@ sudo userdel ggc_user
 Or to make this super simple since you've cloned the support repo:
 
 ```
-sudo ./labs/aws-ml-iot-lab/support/cleanup.sh
+sudo /labs/aws-ml-iot-lab/support/cleanup.sh
 ```
 
 ## Full Restore ( Worst Case )
