@@ -8,6 +8,13 @@ In this challenge, you will configure an IoT device to act as a smart camera, wh
 
 ## Instructions
 
+### Initial Information:
+
+Username: `upsquared`
+Password: `upsquared`
+
+
+
 ### Configure GreenGrass on IoT Device
 
 In this part of the lab we’re we will walk you through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
