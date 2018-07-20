@@ -30,3 +30,7 @@ Now that you have successfully built out a pipeline for your application based a
 In the previous Challenge, you noted performance and speed as two advantages of cloud inference. Unfortunately, by keeping inference in the cloud your IoT devices must regularly send images at constant intervals (i.e. they're **always on**) and they send entire images. This seems like a waste of bandwidth; by putting face-detection inference at the edge, you can directly make Rekognition calls from the device itself. The tradeoff here is that while you are only sending face crops when they're detected over the network, inference at the edge can be less performant.
 
 In this challenge, you will swap out the ML/IoT part of the previous pipeline with a new pipeline that uses AWS DeepLens to run inference on the edge. DeepLens will then put face crops to the S3 bucket correctly, continuing the rest of the application pipeline.
+
+## [Closeout](closeout.md)
+
+During this event you have created quite a few resources, this section will cover deleting things so you do not end up with a surprise bill.

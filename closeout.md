@@ -8,4 +8,6 @@
 
 4. S3 buckets: If S3 buckets created during the lab are not needed for future, then please remove all content and delete the buckets.
 
-5. Lambda: You can delete lambda functions if not needed in future.
+5. Greengrass, delete all groups, devices, and cores.
+
+6. Lambda: You can delete lambda functions if not needed in future.
