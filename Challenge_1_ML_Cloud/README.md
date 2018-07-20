@@ -335,7 +335,7 @@ You should see messages similar to the following:
 [INFO]-Subscribed to topic $aws/things/GGC_Thing-gda/shadow/get/accepted
 ```
 
-###Step 8 - Deploying the Greengrass Group
+### Step 8 - Deploying the Greengrass Group
 
 Now that you have the core running, deploy our group to the device.
 
@@ -358,9 +358,16 @@ Congrats on getting Greengrass running!
 
 
 ### Lambda setup:
-Download Lambda zip file greengrassSagemakerInference.zip located in same github.
+
+Download Lambda zip file greengrassSagemakerInference.zip located in this github repository [Link](greengrassSagemakerInference.zip)
+
 Unzip the file on your machine.
-Open greengrassSagemakerInference.py, check line #24, endpoint_name = 'xxxxx', replace xxxx with actual SagemakerEndpoint you created during Sagemaker prechallenge lab.
+Open greengrassSagemakerInference.py, check line #24 for:
+```python
+endpoint_name = 'xxxxx', replace xxxx with actual 
+```
+SagemakerEndpoint you created during Sagemaker prechallenge lab. For example it should look like this `sagemaker-mxnet-2018-07-19-20-31-44-680` 
+
 Save the file.
 Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. We will use this zip file to create lambda.
 
