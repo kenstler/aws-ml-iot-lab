@@ -2,31 +2,74 @@
 
 ## Summary
 
-Now that you have a face-detection model on a SageMaker endpoint, we can leverage that endpoint to build out an ML/IoT pipeline for our app that does all the inference in the cloud. By running inference in the cloud, we're able to use accurate models at a rapid pace by leveraging powerful computational instances like C5.
+Now that you have a face-detection model on a SageMaker endpoint, you can leverage that endpoint to build out a ML/IoT pipeline for your app that does all the inference in the cloud. By running the inference in the cloud, you are able to use accurate models at a rapid pace by leveraging powerful computational instances like the C5 instance type.
 
-In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You'll build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time, including AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
+In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You will also build out the rest of the pipeline that is necessary to create a dashboard for tracking crowd emotions in real-time. This will include using the following AWS services: AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
+
+If at any point you experience problems, raise your hand to get an instructor or attendant to help you.
 
 ## Instructions
 
-## Configure GreenGrass on IoT Device
-In this part of the lab we’re we will walk you through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
+### Initial Information:
+
+Username: `upsquared`
+
+Password: `upsquared`
+
+To make the lab much easier, it is recommended that you connect to your device via SSH. To do that you'll need an SSH client and the IP address of your IoT device.
+
+If you are on Windows, make sure you have [Putty](https://www.ssh.com/ssh/putty/windows/install) installed. If you are using MacOS or Linux a SSH client is already installed for you.
+
+To find your device's IP address login to the device with the username and password above and enter the following command:
+
+```
+ifconfig
+```
+
+Look for output like this:
+
+```
+wlp4s0    Link encap:Ethernet  HWaddr 70:1c:e7:a4:59:8e
+          inet addr:192.168.1.141  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::721c:e7ff:fea4:598e/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:17849 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8811 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:21227113 (21.2 MB)  TX bytes:947013 (947.0 KB)
+```
+
+Indicating that your IP address is: `192.168.1.141`
+
+Then on your computer enter the following to connect(when prompted enter the password and press enter):
+
+```
+ssh upsquared@192.168.1.141
+```
+
+This connection will allow you to enter commands on the device via copying and pasting for example. If you have any problems with this please raise your hand for an instructor. 
+
+
+### Configure GreenGrass on IoT Device
+
+In this part of the lab you will walk through setting up and entire AWS Greengrass installation including building a simple Greengrass aware client to communicate with your Greengrass core.
 
 ### Step 1 - Setting up the hardware	
 There are a few things the device is going to need set up at an operating system level to support Greengrass.
-We need to add a user and group for Greengrass to use. SSH into your device and run the following commands:
+You need to add a user and group for Greengrass to use. SSH into your device and run the following commands:
 
 ```
 sudo adduser --system ggc_user
 sudo addgroup --system ggc_group
 ```
 
-Next we want to edit one of our boot scripts to make sure hardlink/softlink protection is enabled. Edit the following file:
+Next you want to edit one of our boot scripts to make sure hardlink/softlink protection is enabled. Edit the following file:
 
 ```
 sudo nano /etc/sysctl.d/99-sysctl.conf
 ```
 
-This file is probably empty and you can just add these two lines.
+This file may or may not be empty, go to the bottom of the file and see if these 2 lines exist. If they do, nothing further is needed. If they do not, add them.
 
 ```
 fs.protected_hardlinks = 1
@@ -50,15 +93,15 @@ You should see that hardlinks and softlinks are set to 1.
 ### Step 2 - Setting up the Greengrass Group
 Next we’re going to set up the Greengrass group and we’re going to be using the AWS IoT Console to complete these steps. The group is how we control which devices can communicate with core as well as the available Lambdas and logging options.
 
-Log into the AWS IoT Console  (aws.amazon.com) and click on Greengrass, and select “Groups” from the left hand menu. 
+Log into the AWS IoT Console  (aws.amazon.com) and click on "Services" then in the search bar enter: "Greengrass" and click "Greengrass" in the dropdown. Next select “Groups” from the left hand menu. 
 
-Select “Create first Group”.
+Select “Create first Group” or "Create Group".
 
-Select “Easy Group Creation”.
+Select “Easy Group Creation” by clicking "Use easy creation".
 
-Enter a group name, let’s use “MLandIoT”
+Enter a group name, use “MLandIoT” then click "Next".
 
- Keep the same core name, “MLandIoT_Core”
+Keep the same core name, “MLandIoT_Core” by clicking "Next".
  
 Select “Create Group and Core”.
 
@@ -75,13 +118,15 @@ When you download the certificates, they will have names such as: xxxxxxxxx-cert
 Rename xxxxxxx-certificate.pem.crt to MLandIoT_core.pem.crt
 Rename xxxxxxx-private.pem.key to MLandIoT_core.pem.key
 
-It is recommended that you create a working directory to keep all of your files in one place. 
-Next, let’s download the Greengrass software for our device:
-Select the x86_64 software package and click the download button.
  
-Download all certificates
+Download all certificates by clicking the download button on the page.
 
-Download Greengrass Core software software (Download Greengrass version 1.5.0, choose x86_64)
+It is recommended that you create a working directory to keep all of your files in one place. 
+
+Next, download the Greengrass software for our device:
+Select the x86_64 software package and click the download button.
+
+Download Greengrass Core software software (Download Greengrass version 1.5.0, choose x86_64) Make sure that you download the release for Ubuntu 16.04 x86_64.
 
 You can now click the Finish button. You will see the following un-deployed group ready for the next steps.
 
@@ -90,49 +135,41 @@ You can now click the Finish button. You will see the following un-deployed grou
 
 You need a role attached to your Greengrass group that gives additional permissions to the core to be able to directly access various AWS services.
 
-Navigate to aws.amazon.com and open the Identity and Access Management console (IAM)
+In the top of the console, click "Services", in the search bar enter "IAM" and click the first item from the dropdown.
  
 Click on roles and Create new role
 
-Select AWS Greengrass Role as the Service Role Type – you will have to scroll down to find it in the list.
+Select AWS Greengrass Role as the Service Role Type, then click "Next Permissions".
 
-Select AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AmazonSagemakerFullAccess policies and click Next
+Enter the following values one at a time, then click to enable them: AWSGreengrassResourceAccessRolePolicy, CloudWatchLogsFullAccess, AmazonS3ReadOnlyAccess, AWSGreengrassFullAccess and AmazonSagemakerFullAccess policies and click "Next: Review".
 
 Enter a name for this role, let’s call it MLandIoTCoreRole
  
 Click Create Role
 
-Next we’re going to attach this role to our new Greengrass group.
+Next you are going to attach this role to the new Greengrass group.
 
-Open the AWS IoT console
+Open the AWS IoT console, by going back to the Greengrass service page ( searchbar to find it).
 
 Click on Greengrass > Groups and select the MLandIoT group
 
-Click on Settings, you can see we have no Group Role
-
-Click on Add Role
-
- 
+Click on "Add Role" in the top corner of the settings page.
 
 Pick our service role, MLandIoTCoreRole and click Save
  
 ### Step 4 - Set up logging
 
-We can set up logging so that all logs on the Greengrass core are sent to CloudWatch logs. This includes the logs from the operation of the core as well as the logs from our Lambda functions which are extremely useful to have.
+You can set up logging so that all logs on the Greengrass core are sent to CloudWatch logs. This includes the logs from the operation of the core as well as the logs from the Lambda functions which are extremely useful to have.
 
-
-Under CloudWatch logs configuration click Edit
+While on the settings page scroll to until you see "CloudWatch logs configuration" then click "Edit".
 
 Click on Add another log type
-
  
 Select User Lambdas and Greengrass system
 
 Click Update
 
- 
 Keep the log settings as Informational
-
  
 Click Save
 
@@ -164,9 +201,9 @@ You should see something similar with your Device IP address
 
 ### Step 6 - Installing Greengrass on the device
 
-In this step we’re going to take our software package and certificates and get them configured on our Upsquared device 
+In this step you are going to take the software package and certificates and get them configured on the Upsquared device 
 
-We will now copy the following to your Upsquared Device :
+You will now copy the following to your Upsquared Device :
 
 MLandIoT_core.pem.crt and MLandIoT_core.pem.key file to your home folder which is: /home/upsquared
 
@@ -180,7 +217,7 @@ replace your_device_ip to the IP address of the device. You can get IP address o
 scp MLandIoT_core.cert.pem  upsquared@your_device_ip:/home/upsquared/
 scp MLandIoT_core.private.key  upsquared@your_device_ip:/home/upsquared/
 
-scp greengrass-ubuntu-x86-64-1.5.0.tar upsquared@your_device_ip:/home/upsquared
+scp greengrass-linux-x86-64-1.5.0.tar.gz upsquared@your_device_ip:/home/upsquared
 ```
 
 When asked for a password use “upsquared”, 
@@ -189,16 +226,8 @@ Windows users can use Filezilla to transfer certs and installation software.
 
 On the Device terminal extract the tar.gz file to the root of your device.
 
-if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar (notice extension is .tar) then
-
 ```
-sudo tar -xvf ./greengrass-ubuntu-x86-64-1.5.0.tar -C /
-```
-
-if name of the software is greengrass-ubuntu-x86-64-1.5.0.tar.gz (notice extension is .gz) then
-
-```
-sudo tar -zxvf greengrass-ubuntu-x86-64-1.5.0.tar.gz -C /
+sudo tar -zxvfgreengrass-linux-x86-64-1.5.0.tar.gz -C /
 ```
 
 Copy your certificate and private key to the greengrass certificate folder.
@@ -208,7 +237,7 @@ sudo cp /home/upsquared/MLandIoT_core.cert.pem /greengrass/certs
 sudo cp /home/upsquared/MLandIoT_core.private.key /greengrass/certs
 ```
 
-Next we need to edit our configuration file
+Next you need to edit our configuration file
 
 ```
 sudo nano /greengrass/config/config.json
@@ -266,7 +295,7 @@ Your final config file should look something like this:
 }
 ```
 
-Lastly, we need to get a copy of the Root CA file for server identity verification.
+Lastly, you need to get a copy of the Root CA file for server identity verification.
 
 change directory to /greengrass/certs. Enter this on your device to obtain a copy of the certificate:
 
@@ -276,8 +305,8 @@ sudo wget -O root-ca.pem  https://www.symantec.com/content/en/us/enterprise/veri
 
 ### Step 7 - Starting the Greengrass core
 
-We are now ready to run the Greengrass Core! Once we see that it is running we will then deploy the group configuration from the console.
-To make the next steps easier I suggest running as root.
+You are now ready to run the Greengrass Core! Once we see that it is running you will then deploy the group configuration from the console.
+To make the next steps easier it is recommended to run the commands as root.
 ```
 sudo su
 cd /greengrass/ggc/core
@@ -287,8 +316,9 @@ cd /greengrass/ggc/core
 To make sure that your core is running and listening for messages on port 8883 enter:
 ```
 netstat –peanut
-look for 0.0.0.0:8883 
  ```
+
+ Look for any traffic on port 8883
 
 The log files are located in /greengrass/ggc/var/log/system/*
 
@@ -306,9 +336,9 @@ You should see messages similar to the following:
 [INFO]-Subscribed to topic $aws/things/GGC_Thing-gda/shadow/get/accepted
 ```
 
-###Step 8 - Deploying the Greengrass Group
+### Step 8 - Deploying the Greengrass Group
 
-Now that you have the core running, let’s deploy our group to the device.
+Now that you have the core running, deploy our group to the device.
 
 On your group management page, click on Deployments
 
@@ -329,13 +359,20 @@ Congrats on getting Greengrass running!
 
 
 ### Lambda setup:
-Download Lambda zip file greengrassSagemakerInference.zip located in same github.
-Unzip the file on your machine.
-Open greengrassSagemakerInference.py, check line #24, endpoint_name = 'xxxxx', replace xxxx with actual SagemakerEndpoint you created during Sagemaker prechallenge lab.
-Save the file.
-Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. We will use this zip file to create lambda.
 
-Deploy Lambda (GG Group Settings with the new Lambda and Resources)
+Download Lambda zip file greengrassSagemakerInference.zip located in this github repository [Link](greengrassSagemakerInference.zip) You will lineed to click the "View Raw" link on this page to download the file.
+
+Unzip the file on your machine.
+Open greengrassSagemakerInference.py, check line #24 for:
+```
+endpoint_name = 'xxxxx', replace xxxx with actual 
+```
+SagemakerEndpoint you created during Sagemaker prechallenge lab. For example it should look like this `sagemaker-mxnet-2018-07-19-20-31-44-680` 
+
+Save the file.
+Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. You will use this zip file to create lambda.
+
+#### Deploy Lambda (GG Group Settings with the new Lambda and Resources)
 
 In AWS IOT Greengrass console. Click on the Grassgrass group which you have created earlier.
 
@@ -343,16 +380,19 @@ In AWS IOT Greengrass console. Click on the Grassgrass group which you have crea
 2.	Click on Lambda -> Add Lambda -> Create new Lambda
 
 Name		: greengrassSagemakerInference
+
 RunTime	: Python 2.7
 
 Role		: Choose an existing role
 
 Exiting role	: service-role/lambda_basic_execution
 
-hit creat lambda button.
-In next screen, under function code, choose Code entry type as "Upload a .zip file"
-Upload greengrassSagemakerInference.zip
- 
+Note if you do not see this role create it following these instructions in a new tab: https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example-create-iam-role.html
+
+Hit create lambda button.
+In next screen, under "Function code", choose Code entry type as "Upload a .zip file" and upload your file  "greengrassSagemakerInference.zip" Be sure to upload your version with the changes, not the original file you downloaded.
+
+Also update the handler section to be:
 Handler	: "greengrassSagemakerInference.function_handler"
 
 Save lambda by clicking "Save" button on top.
@@ -362,14 +402,14 @@ Lets publish this lambda function;
 Select Actions dropdownbox
 
 Click "Publish new version"
-keep Publish box empty, Click on "Publish".
+keep the description box empty, Click on "Publish".
 
-This will create version 1 for the new function. Now we can go back to Greengrass console to complete our group settings before the deployment.
+This will create version 1 for the new function. Now you can go back to Greengrass console to complete our group settings before the deployment.
 
 3.	Add Lambda to the Group
 Groups -> MLandIoT -> Lambdas -> Add Lambda -> Use exiting Lambda -> greengrassSagemakerInference -> Version 1 ->Finish
 
-Under Groups -> Lambdas, select greengrassSagemakerInference. Click Edit button.
+Under Groups -> Lambdas, select greengrassSagemakerInference. Click Edit Configuration button.
 
 Edit lambda memory limit and timeout like below
 
@@ -384,28 +424,36 @@ Under Groups -> MLandIoT ->Resources
 Select Add Resource
 
 o	Name this resource - webcam
+
 o	Local resource type – Device
+
 o	Device path - /dev/video0
-o	Specify the OS group used to access this resource: Select "Automatically add OS group"
+
+o	For Group owner file access permission: Select "Automatically add OS group"
+
 o	Select "Read and write access"
 
-Save
+Click Save
 
 Under Groups -> Lambdas, select greengrassSagemakerInference
+
 5.	Attach the resources to Lambda
 o	Add resources – select webcam
 
-6.	Add Subscriptions
-Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud and Topic as “ModelInference” 
+6.	Click back and then go to Subscriptions, click Add Subscriptions
+
+Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud, click Next and enter "ModelInference"  as the Topic. Click Next, then Finish.
 	 
 
 7.	Deploy Greengrass group:
 
-Groups -> YourGroup -> Actions -> Deploy
+Inside the group click "Deployments" on the left then in "Actions" on the right click "Deploy"
 
 Evaluate the Model @Cloud
 
-1.	Subscribe to "ModelInference" topic via AWS IoT Console / Test interface on console.
+Now go back to the main IoT console by searching for "Greengrass" in the services menu. On the left, select "Test" then subscribe to a topic.
+
+1.	Subscribe to "ModelInference" topic via AWS IoT Console / Test interface on console. All default options are fine. Finish by clicking "Subscribe to topic"
 
 2.	You should be able to see prediction results flooding in
 
@@ -415,9 +463,9 @@ Congratulations Greengrass setup and configuration is done!!!
 
 ## Create Rekognition Lambda
 
-Now that we've configured our IoT device to send images to our SageMaker endpoint, we've completed the first two stages of our pipeline. The last stages include processing our face crops through Rekognition to extract emotion scores, storing scores in a DynamoDB table, and pushing scores to Cloudwatch so we can build a dashboard to track emotion metrics.
+Now that you have configured our IoT device to send images to our SageMaker endpoint, you have completed the first two stages of our pipeline. The last stages include processing our face crops through Rekognition to extract emotion scores, storing scores in a DynamoDB table, and pushing scores to Cloudwatch so you can build a dashboard to track emotion metrics.
 
-We're going to use AWS Lambda to create a script that does all three of these things every time a face crop is pushed to S3. Navigate to the Lambda console and under the "Function" Dashboard select "Create function" as you did before. This time we'll be authoring a function from scratch:
+You are going to use AWS Lambda to create a script that does all three of these things every time a face crop is pushed to S3. Navigate to the Lambda console and under the "Function" Dashboard select "Create function" as you did before. This time you will be authoring a function from scratch:
 
 ![Alt text](../screenshots/create_lambda_0.png)
 
@@ -432,11 +480,11 @@ Then click "Create function."
 
 ![Alt text](../screenshots/create_lambda_1.png)
 
-You should now be on the lambda function screen. Before we start editing the lambda, we need to assign additional permissions to the lambda role. As you can tell from the services listed on the right, we currently only have access to "Amazon CloudWatch Logs" and "Amazon S3".
+You should now be on the lambda function screen. Before you start editing the lambda, you need to assign additional permissions to the lambda role. As you can tell from the services listed on the right, you currently only have access to "Amazon CloudWatch Logs" and "Amazon S3".
 
 ![Alt text](../screenshots/edit_lambda_0.png)
 
-We need to add permissions for Rekognition and DynamoDB. Navigate to the IAM dashboard by searching for "IAM" in the "Services" drop-down. Once there, click "Roles" on the left side-bar and type in your rekognition lambda role name.
+You need to add permissions for Rekognition and DynamoDB. Navigate to the IAM dashboard by searching for "IAM" in the "Services" drop-down. Once there, click "Roles" on the left side-bar and type in your rekognition lambda role name.
 
 ![Alt text](../screenshots/add_permissions_0.png)
 
@@ -456,14 +504,14 @@ Then, click "Attach policy", and you should now see these policies attached to y
 
 ![Alt text](../screenshots/add_permissions_4.png)
 
-Back on the lambda function page, we can now see additional resources available to us on the right. 
+Back on the lambda function page, you can now see additional resources available to us on the right. 
 
 ![Alt text](../screenshots/edit_lambda_1.png)
 
-We know that we want this lambda script to run everytime a face crop is uploaded to S3, so let's add an event trigger to this Lambda. On the left, you'll see a list of triggers. Select "S3". At the bottom of the page, a configuration menu will open up:
+You know that you want this lambda script to run everytime a face crop is uploaded to S3, add an event trigger to this Lambda. On the left, you'll see a list of triggers. Select "S3". At the bottom of the page, a configuration menu will open up:
 * Under Bucket: Select the bucket you created to store faces (this will be different from mine).
-* Under Event type: Select "PUT". We want the script to trigger when a PutObject call is made.
-* Under Prefix: Enter "faces". We want the script to only trigger on items uploaded to the faces prefix.
+* Under Event type: Select "PUT". You want the script to trigger when a PutObject call is made.
+* Under Prefix: Enter "faces". You want the script to only trigger on items uploaded to the faces prefix.
 
 ![Alt text](../screenshots/edit_lambda_2.png)
 
@@ -471,7 +519,9 @@ Then click "Add". Next, select the center box with your rekognition lambda's nam
 
 ![Alt text](../screenshots/edit_lambda_3.png)
 
-Next, you're going to copy and paste code we've provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2, "rekognize-emotions.py", but we've included it here as well for your convenience:
+Next, you're going to copy and paste code we have provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2, "[rekognize-emotions.py](../Challenge_2_ML_Edge/rekognize-emotions.py)", but it is included here as well for your convenience:
+
+You will want to download the file from that location, via the "raw" link.
 
 ```python
 from __future__ import print_function
@@ -564,11 +614,11 @@ Plese take a look at what this script does. The Function `lambda_handler` handle
 * If so, pushes emotion type and confidence score to CloudWatch
 * If at least one emotion in the response is detected or significant, the record is stored in a DynamoDB table.
 
-Once you've copy and pasted the code, we're almost ready to Save the function so it can start triggering.
+Once you've copy and pasted the code, you are almost ready to Save the function so it can start triggering.
 
 ![Alt text](../screenshots/edit_lambda_4.png)
 
-Before we do that, we need to create the DynamoDB table to store detected emotions and emotion scores.
+Before you do that, you need to create the DynamoDB table to store detected emotions and emotion scores.
 
 ## Create DynamoDB Table
 
@@ -586,7 +636,7 @@ Then click create. Once created, go back to your lambda function and make sure t
 
 ## Emotion-tracking Dashboard using Cloudwatch
 
-Now that we've created the lambda function for processing cropped faces and a DynamoDB table to record results, we're going to build the dashboard that is the center-piece of our application: real-time emotion tracking. At this point, you should have your IoT device running and collecting face crops if it hasn't been already.
+Now that you have created the lambda function for processing cropped faces and a DynamoDB table to record results, you are going to build the dashboard that is the center-piece of our application: real-time emotion tracking. At this point, you should have your IoT device running and collecting face crops if it hasn't been already.
 
 Navigate to CloudWatch by searching for "CloudWatch" under the "Services" tab. Once at the dashboard, select "Dashboards" from the left side-bar.
 
@@ -627,11 +677,4 @@ Finally, click "Create Widget" and you'll have successfully created the emotion 
 
 
 
-
-
-
-
-
-
-
-
+To continue, start [Challenge 2](../Challenge_2_ML_Edge/README.md)
