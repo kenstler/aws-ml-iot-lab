@@ -359,19 +359,19 @@ Congrats on getting Greengrass running!
 
 ### Lambda setup:
 
-Download Lambda zip file greengrassSagemakerInference.zip located in this github repository [Link](greengrassSagemakerInference.zip)
+Download Lambda zip file greengrassSagemakerInference.zip located in this github repository [Link](greengrassSagemakerInference.zip) You will lineed to click the "View Raw" link on this page to download the file.
 
 Unzip the file on your machine.
 Open greengrassSagemakerInference.py, check line #24 for:
-```python
+```
 endpoint_name = 'xxxxx', replace xxxx with actual 
 ```
 SagemakerEndpoint you created during Sagemaker prechallenge lab. For example it should look like this `sagemaker-mxnet-2018-07-19-20-31-44-680` 
 
 Save the file.
-Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. We will use this zip file to create lambda.
+Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. You will use this zip file to create lambda.
 
-Deploy Lambda (GG Group Settings with the new Lambda and Resources)
+#### Deploy Lambda (GG Group Settings with the new Lambda and Resources)
 
 In AWS IOT Greengrass console. Click on the Grassgrass group which you have created earlier.
 
@@ -385,10 +385,10 @@ Role		: Choose an existing role
 
 Exiting role	: service-role/lambda_basic_execution
 
-hit creat lambda button.
-In next screen, under function code, choose Code entry type as "Upload a .zip file"
-Upload greengrassSagemakerInference.zip
- 
+Hit create lambda button.
+In next screen, under "Function code", choose Code entry type as "Upload a .zip file" and upload your file  "greengrassSagemakerInference.zip" Be sure to upload your version with the changes, not the original file you downloaded.
+
+Also update the handler section to be:
 Handler	: "greengrassSagemakerInference.function_handler"
 
 Save lambda by clicking "Save" button on top.
@@ -398,14 +398,14 @@ Lets publish this lambda function;
 Select Actions dropdownbox
 
 Click "Publish new version"
-keep Publish box empty, Click on "Publish".
+keep the description box empty, Click on "Publish".
 
-This will create version 1 for the new function. Now we can go back to Greengrass console to complete our group settings before the deployment.
+This will create version 1 for the new function. Now you can go back to Greengrass console to complete our group settings before the deployment.
 
 3.	Add Lambda to the Group
 Groups -> MLandIoT -> Lambdas -> Add Lambda -> Use exiting Lambda -> greengrassSagemakerInference -> Version 1 ->Finish
 
-Under Groups -> Lambdas, select greengrassSagemakerInference. Click Edit button.
+Under Groups -> Lambdas, select greengrassSagemakerInference. Click Edit Configuration button.
 
 Edit lambda memory limit and timeout like below
 
@@ -422,17 +422,19 @@ Select Add Resource
 o	Name this resource - webcam
 o	Local resource type – Device
 o	Device path - /dev/video0
-o	Specify the OS group used to access this resource: Select "Automatically add OS group"
+o	For Group owner file access permission: Select "Automatically add OS group"
 o	Select "Read and write access"
 
 Save
 
 Under Groups -> Lambdas, select greengrassSagemakerInference
+
 5.	Attach the resources to Lambda
 o	Add resources – select webcam
 
-6.	Add Subscriptions
-Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud and Topic as “ModelInference” 
+6.	Click back and then go to Subscriptions, click Add Subscriptions
+
+Go to Subscriptions menu located on left side, then add subscription, select source as lambda – greengrassSagemakerInference, target as IoT Cloud, click Next and enter "ModelInference"  as the Topic. Click Next, then Finish.
 	 
 
 7.	Deploy Greengrass group:
