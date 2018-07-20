@@ -7,13 +7,13 @@ This file contains instructions for lab setup of all devices and cleanup after t
 To do the clean without checking out any code, just enter one of the following commands directly on the device.
 
 ```
-sudo sh -c "$(curl -fsSL https://bit.ly/2mvLyS9)"
+sudo sh -c "$(curl -fsSL https://bit.ly/2LxtJwY)"
 ```
 
 or 
 
 ```
-sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/chrisking/upsquaredsetup/master/setup.sh)"
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/kenstler/aws-ml-iot-lab/master/support/cleanup.sh)"
 ```
 
 ## Configuring the Device ( first time )
