@@ -316,8 +316,9 @@ cd /greengrass/ggc/core
 To make sure that your core is running and listening for messages on port 8883 enter:
 ```
 netstat –peanut
-look for 0.0.0.0:8883 
  ```
+
+ Look for any traffic on port 8883
 
 The log files are located in /greengrass/ggc/var/log/system/*
 
@@ -385,6 +386,8 @@ RunTime	: Python 2.7
 Role		: Choose an existing role
 
 Exiting role	: service-role/lambda_basic_execution
+
+Note if you do not see this role create it following these instructions in a new tab: https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example-create-iam-role.html
 
 Hit create lambda button.
 In next screen, under "Function code", choose Code entry type as "Upload a .zip file" and upload your file  "greengrassSagemakerInference.zip" Be sure to upload your version with the changes, not the original file you downloaded.
@@ -460,9 +463,9 @@ Congratulations Greengrass setup and configuration is done!!!
 
 ## Create Rekognition Lambda
 
-Now that we've configured our IoT device to send images to our SageMaker endpoint, we've completed the first two stages of our pipeline. The last stages include processing our face crops through Rekognition to extract emotion scores, storing scores in a DynamoDB table, and pushing scores to Cloudwatch so we can build a dashboard to track emotion metrics.
+Now that you have configured our IoT device to send images to our SageMaker endpoint, you have completed the first two stages of our pipeline. The last stages include processing our face crops through Rekognition to extract emotion scores, storing scores in a DynamoDB table, and pushing scores to Cloudwatch so you can build a dashboard to track emotion metrics.
 
-We're going to use AWS Lambda to create a script that does all three of these things every time a face crop is pushed to S3. Navigate to the Lambda console and under the "Function" Dashboard select "Create function" as you did before. This time we'll be authoring a function from scratch:
+You are going to use AWS Lambda to create a script that does all three of these things every time a face crop is pushed to S3. Navigate to the Lambda console and under the "Function" Dashboard select "Create function" as you did before. This time you will be authoring a function from scratch:
 
 ![Alt text](../screenshots/create_lambda_0.png)
 
@@ -477,11 +480,11 @@ Then click "Create function."
 
 ![Alt text](../screenshots/create_lambda_1.png)
 
-You should now be on the lambda function screen. Before we start editing the lambda, we need to assign additional permissions to the lambda role. As you can tell from the services listed on the right, we currently only have access to "Amazon CloudWatch Logs" and "Amazon S3".
+You should now be on the lambda function screen. Before you start editing the lambda, you need to assign additional permissions to the lambda role. As you can tell from the services listed on the right, you currently only have access to "Amazon CloudWatch Logs" and "Amazon S3".
 
 ![Alt text](../screenshots/edit_lambda_0.png)
 
-We need to add permissions for Rekognition and DynamoDB. Navigate to the IAM dashboard by searching for "IAM" in the "Services" drop-down. Once there, click "Roles" on the left side-bar and type in your rekognition lambda role name.
+You need to add permissions for Rekognition and DynamoDB. Navigate to the IAM dashboard by searching for "IAM" in the "Services" drop-down. Once there, click "Roles" on the left side-bar and type in your rekognition lambda role name.
 
 ![Alt text](../screenshots/add_permissions_0.png)
 
@@ -501,14 +504,14 @@ Then, click "Attach policy", and you should now see these policies attached to y
 
 ![Alt text](../screenshots/add_permissions_4.png)
 
-Back on the lambda function page, we can now see additional resources available to us on the right. 
+Back on the lambda function page, you can now see additional resources available to us on the right. 
 
 ![Alt text](../screenshots/edit_lambda_1.png)
 
-We know that we want this lambda script to run everytime a face crop is uploaded to S3, so let's add an event trigger to this Lambda. On the left, you'll see a list of triggers. Select "S3". At the bottom of the page, a configuration menu will open up:
+You know that you want this lambda script to run everytime a face crop is uploaded to S3, add an event trigger to this Lambda. On the left, you'll see a list of triggers. Select "S3". At the bottom of the page, a configuration menu will open up:
 * Under Bucket: Select the bucket you created to store faces (this will be different from mine).
-* Under Event type: Select "PUT". We want the script to trigger when a PutObject call is made.
-* Under Prefix: Enter "faces". We want the script to only trigger on items uploaded to the faces prefix.
+* Under Event type: Select "PUT". You want the script to trigger when a PutObject call is made.
+* Under Prefix: Enter "faces". You want the script to only trigger on items uploaded to the faces prefix.
 
 ![Alt text](../screenshots/edit_lambda_2.png)
 
@@ -516,7 +519,9 @@ Then click "Add". Next, select the center box with your rekognition lambda's nam
 
 ![Alt text](../screenshots/edit_lambda_3.png)
 
-Next, you're going to copy and paste code we've provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2, "rekognize-emotions.py", but we've included it here as well for your convenience:
+Next, you're going to copy and paste code we have provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2, "[rekognize-emotions.py](../Challenge_2_ML_Edge/rekognize-emotions.py)", but it is included here as well for your convenience:
+
+You will want to download the file from that location, via the "raw" link.
 
 ```python
 from __future__ import print_function
@@ -609,11 +614,11 @@ Plese take a look at what this script does. The Function `lambda_handler` handle
 * If so, pushes emotion type and confidence score to CloudWatch
 * If at least one emotion in the response is detected or significant, the record is stored in a DynamoDB table.
 
-Once you've copy and pasted the code, we're almost ready to Save the function so it can start triggering.
+Once you've copy and pasted the code, you are almost ready to Save the function so it can start triggering.
 
 ![Alt text](../screenshots/edit_lambda_4.png)
 
-Before we do that, we need to create the DynamoDB table to store detected emotions and emotion scores.
+Before you do that, you need to create the DynamoDB table to store detected emotions and emotion scores.
 
 ## Create DynamoDB Table
 
@@ -631,7 +636,7 @@ Then click create. Once created, go back to your lambda function and make sure t
 
 ## Emotion-tracking Dashboard using Cloudwatch
 
-Now that we've created the lambda function for processing cropped faces and a DynamoDB table to record results, we're going to build the dashboard that is the center-piece of our application: real-time emotion tracking. At this point, you should have your IoT device running and collecting face crops if it hasn't been already.
+Now that you have created the lambda function for processing cropped faces and a DynamoDB table to record results, you are going to build the dashboard that is the center-piece of our application: real-time emotion tracking. At this point, you should have your IoT device running and collecting face crops if it hasn't been already.
 
 Navigate to CloudWatch by searching for "CloudWatch" under the "Services" tab. Once at the dashboard, select "Dashboards" from the left side-bar.
 
@@ -672,11 +677,4 @@ Finally, click "Create Widget" and you'll have successfully created the emotion 
 
 
 
-
-
-
-
-
-
-
-
+To continue, start [Challenge 2](../Challenge_2_ML_Edge/README.md)

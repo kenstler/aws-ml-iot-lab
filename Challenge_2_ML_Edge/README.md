@@ -266,3 +266,10 @@ You should now start to see deployment status. Once the project has been deploye
 
 **Note**: If your model download progress hangs at a blank state (Not 0%, but **blank**) then you may need to reset greengrass on DeepLens. To do this, log onto the DeepLens device, open up a terminal, and type the following command:
 `sudo systemctl restart greengrassd.service --no-block`. After a couple minutes, you model should start to download.
+
+
+All Done!
+
+To wrap up, start [Closeout](../closeout.md)
+
+
