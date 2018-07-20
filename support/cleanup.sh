@@ -2,8 +2,7 @@
 
 # First Remove the Greengrass home directory content:
 cd ~/
-rm greengrass-ubuntu*.*
-rm ML*.*
+rm *.*
 
 # Remove the Greengrass root directories:
 sudo rm -rf /greengrass

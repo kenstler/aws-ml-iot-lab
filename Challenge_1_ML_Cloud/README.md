@@ -126,7 +126,7 @@ It is recommended that you create a working directory to keep all of your files 
 Next, download the Greengrass software for our device:
 Select the x86_64 software package and click the download button.
 
-Download Greengrass Core software software (Download Greengrass version 1.5.0, choose x86_64)
+Download Greengrass Core software software (Download Greengrass version 1.5.0, choose x86_64) Make sure that you download the release for Ubuntu 16.04 x86_64.
 
 You can now click the Finish button. You will see the following un-deployed group ready for the next steps.
 
@@ -379,6 +379,7 @@ In AWS IOT Greengrass console. Click on the Grassgrass group which you have crea
 2.	Click on Lambda -> Add Lambda -> Create new Lambda
 
 Name		: greengrassSagemakerInference
+
 RunTime	: Python 2.7
 
 Role		: Choose an existing role
@@ -420,12 +421,16 @@ Under Groups -> MLandIoT ->Resources
 Select Add Resource
 
 o	Name this resource - webcam
+
 o	Local resource type – Device
+
 o	Device path - /dev/video0
+
 o	For Group owner file access permission: Select "Automatically add OS group"
+
 o	Select "Read and write access"
 
-Save
+Click Save
 
 Under Groups -> Lambdas, select greengrassSagemakerInference
 
@@ -439,11 +444,13 @@ Go to Subscriptions menu located on left side, then add subscription, select sou
 
 7.	Deploy Greengrass group:
 
-Groups -> YourGroup -> Actions -> Deploy
+Inside the group click "Deployments" on the left then in "Actions" on the right click "Deploy"
 
 Evaluate the Model @Cloud
 
-1.	Subscribe to "ModelInference" topic via AWS IoT Console / Test interface on console.
+Now go back to the main IoT console by searching for "Greengrass" in the services menu. On the left, select "Test" then subscribe to a topic.
+
+1.	Subscribe to "ModelInference" topic via AWS IoT Console / Test interface on console. All default options are fine. Finish by clicking "Subscribe to topic"
 
 2.	You should be able to see prediction results flooding in
 
