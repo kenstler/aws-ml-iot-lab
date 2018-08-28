@@ -90,6 +90,20 @@ sudo sysctl -a | grep fs.protected
 ```
 You should see that hardlinks and softlinks are set to 1.
 
+
+This completes pre requesites needed for Greengrass
+
+Later on we wil need to setup local lambda and that lambda needs some libraries. Install these libraries as below
+
+```
+pip install jmespath
+
+pip install python-dateutil
+ 
+sudo apt-get install python-opencv
+
+```
+
 ### Step 2 - Setting up the Greengrass Group
 Next we’re going to set up the Greengrass group and we’re going to be using the AWS IoT Console to complete these steps. The group is how we control which devices can communicate with core as well as the available Lambdas and logging options.
 
@@ -367,7 +381,7 @@ Open greengrassSagemakerInference.py, check line #24 for:
 ```
 endpoint_name = 'xxxxx', replace xxxx with actual 
 ```
-SagemakerEndpoint you created during Sagemaker prechallenge lab. For example it should look like this `sagemaker-mxnet-2018-07-19-20-31-44-680` 
+SagemakerEndpoint you created during Sagemaker pre-challenge lab. For example it should look like this `sagemaker-mxnet-2018-07-19-20-31-44-680` 
 
 Save the file.
 Select all content of the folder "greengrassSagemakerInference" and create zip file, name it greengrassSagemakerInference.zip.  Make sure content of the folder is  zipped and not the folder itself. You will use this zip file to create lambda.
